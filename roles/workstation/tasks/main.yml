@@ -1,0 +1,96 @@
+---
+# tasks file for workstation
+- name: Add rpmfusion repos
+  become: yes
+  package:
+    name:
+      - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_version }}.noarch.rpm
+      - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm
+  when: workstation_enable_rpmfusion
+
+- name: Add VS Code repo key
+  become: yes
+  rpm_key:
+    key: https://packages.microsoft.com/keys/microsoft.asc
+
+- name: Add VS Code repo
+  become: yes
+  yum_repository:
+    name: code
+    description: Visual Studio Code
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+    gpgcheck: yes
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    file: vscode
+
+- name: Update installed packages
+  become: yes
+  package:
+    name: "*"
+    state: latest
+
+- name: Install packages
+  become: yes
+  package:
+    name: "{{ workstation_packages }}"
+
+- name: Enable classic snap support
+  become: yes
+  file:
+    src: /var/lib/snapd/snap
+    dest: /snap
+    state: link
+
+- name: Install snaps
+  become: yes
+  snap:
+    name: "{{ workstation_snaps }}"
+  when: workstation_use_snapd
+
+- name: Install snaps (classic)
+  become: yes
+  snap:
+    name: "{{ item }}"
+    classic: yes
+  with_items: "{{ workstation_snaps_classic }}"
+  when: workstation_use_snapd
+
+- name: Create an admin user, append to wheel group
+  become: yes
+  user:
+    name: "{{ workstation_user }}"
+    groups: wheel
+    append: yes
+
+- include: kde.yml
+- include: dotfiles.yml
+
+- name: Lookup latest uBlock Origin release
+  uri:
+    url: https://api.github.com/repos/gorhill/uBlock/releases/latest
+    return_content: yes
+  register: ublock_release
+  tags:
+    - ublock
+
+- name: Create firefox extensions folder
+  file:
+    path: /home/{{ workstation_user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+    state: directory
+  tags:
+    - ublock
+
+- name: Install uBlock Origin in firefox
+  get_url:
+    url: "{{ ublock_release.json.body | regex_search('https://addons.mozilla.org/.*xpi') }}"
+    dest: /home/{{ workstation_user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/uBlock0@raymondhill.net.xpi
+  tags:
+    - ublock
+
+- name: Create ~/.gitconfig
+  become: yes
+  become_user: "{{ workstation_user }}"
+  template:
+    src: gitconfig.j2
+    dest: /home/{{ workstation_user }}/.gitconfig
+  when: git_config_user_email is defined and git_config_user_name is defined

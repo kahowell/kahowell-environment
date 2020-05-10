@@ -1,0 +1,76 @@
+---
+- name: Install KDE packages
+  become: yes
+  package:
+    name: "{{ workstation_kde_packages }}"
+  tags:
+    - kde
+
+- name: Create autostart directory
+  file:
+    dest: /home/{{ workstation_user }}/.config/autostart
+    state: directory
+  tags:
+    - kde
+
+- name: Make yakuake autostart
+  file:
+    src: /usr/share/applications/org.kde.yakuake.desktop
+    dest: /home/{{ workstation_user }}/.config/autostart/org.kde.yakuake.desktop
+    state: link
+  tags:
+    - kde
+
+- name: Install sddm
+  become: yes
+  package:
+    name: sddm
+  tags:
+    - kde
+
+- name: Disable any pre-existing display-manager
+  become: yes
+  file:
+    src: /usr/lib/systemd/system/sddm.service
+    dest: /etc/systemd/system/display-manager.service
+    state: link
+  tags:
+    - kde
+
+- name: Enable sddm
+  become: yes
+  service:
+    name: sddm
+    state: started
+  tags:
+    - kde
+
+- name: Configure yakuake
+  copy:
+    src: yakuakerc
+    dest: /home/{{ workstation_user }}/.config/yakuakerc
+  tags:
+    - kde
+
+- name: Copy plasma config script
+  copy:
+    src: configure_plasma.sh
+    dest: /home/{{ workstation_user }}/.config/autostart-scripts/configure_plasma.sh
+    mode: 0744
+  tags:
+    - kde
+    - plasma
+
+- name: Copy plasma config javascript
+  copy:
+    src: kde_menu_config.js
+    dest: /home/{{ workstation_user }}/.config/kde_menu_config.js
+  tags:
+    - kde
+    - plasma
+
+- name: Configure menus (if running)
+  command: /home/{{ workstation_user }}/.config/autostart-scripts/configure_plasma.sh
+  tags:
+    - kde
+    - plasma

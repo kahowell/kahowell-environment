@@ -1,0 +1,16 @@
+---
+# tasks file for ansible
+- name: Ensure ansible installed
+  become: yes
+  package:
+    name:
+      - ansible
+      - ansible-bender
+      - python3-hvac
+
+- name: Clone automation repo
+  become: yes
+  become_user: "{{ workstation_user }}"
+  git:
+    src: "{{ ansible_automation_repo }}"
+    dest: /home/{{ workstation_user }}/ansible

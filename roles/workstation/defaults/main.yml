@@ -1,0 +1,39 @@
+---
+# defaults file for workstation
+workstation_dotfiles_repo: git@github.com:kahowell/dotfiles.git
+
+workstation_enable_rpmfusion: true
+
+workstation_kde_packages:
+  - "@KDE Plasma Workspaces"
+  - sddm
+  - yakuake
+
+workstation_packages:
+  - ansible
+  - code
+  - chromium
+  - discord
+  - firefox
+  - git
+  - kernel-modules-{{ ansible_kernel }}
+  - kernel-modules
+  - libvirt-client
+  - snapd
+  - thunderbird
+  - vagrant-libvirt
+  - vim
+  - virt-manager
+  - vlc
+
+workstation_snaps_classic:
+  - pycharm-community
+  - intellij-idea-community
+
+workstation_snaps:
+  - spotify
+
+workstation_use_snapd: true
+
+# assume we're running from a non-root user of the same username
+workstation_user: "{{ ansible_user_id }}"
