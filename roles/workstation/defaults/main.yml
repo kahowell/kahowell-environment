@@ -33,7 +33,9 @@ workstation_snaps_classic:
 workstation_snaps:
   - spotify
 
+workstation_use_jetbrains_toolbox: false
 workstation_use_snapd: true
+workstation_use_virtualbox: true
 
 # assume we're running from a non-root user of the same username
 workstation_user: "{{ ansible_user_id }}"

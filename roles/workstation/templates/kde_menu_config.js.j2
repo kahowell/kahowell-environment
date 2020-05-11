@@ -1,4 +1,4 @@
-var panel = panels()[1]
+var panel = panels().filter(panel => panel.location === 'bottom')[0]
 panel.hiding = 'autohide'
 var taskmanager = panel.widgets('org.kde.plasma.taskmanager')[0]
 if (taskmanager) {
@@ -7,18 +7,27 @@ if (taskmanager) {
     taskmanager.remove()
 }
 var iconmanager = panel.widgets('org.kde.plasma.icontasks')[0]
+print(panel.widgets())
 iconmanager.currentConfigGroup = 'General'
 iconmanager.writeConfig('launchers', [
     'applications:firefox.desktop',
     'applications:chromium-browser.desktop',
     'applications:mozilla-thunderbird.desktop',
+    'applications:io.github.Hexchat.desktop',
     'applications:discord.desktop',
     'applications:spotify_spotify.desktop',
     'applications:code.desktop',
+{% if workstation_use_jetbrains_toolbox %}
+    'applications:jetbrains-pycharm.desktop',
+    'applications:jetbrains-idea.desktop',
+    'applications:jetbrains-datagrip.desktop',
+{% else %}
     'applications:pycharm-community_pycharm-community.desktop',
     'applications:intellij-idea-community_intellij-idea-community.desktop',
+{% endif %}
     'applications:virt-manager.desktop',
+{% if workstation_use_virtualbox %}
     'applications:virtualbox.desktop',
+{% endif %}
 ])
 theme = 'breeze-dark'
-

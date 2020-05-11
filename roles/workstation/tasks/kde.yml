@@ -62,8 +62,8 @@
     - plasma
 
 - name: Copy plasma config javascript
-  copy:
-    src: kde_menu_config.js
+  template:
+    src: kde_menu_config.js.j2
     dest: /home/{{ workstation_user }}/.config/kde_menu_config.js
   tags:
     - kde
