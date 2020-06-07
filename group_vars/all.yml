@@ -1,0 +1,6 @@
+---
+wifi_ssid: "{{ vault_wifi_ssid }}"
+wifi_passphrase: "{{ vault_wifi_passphrase }}"
+luks_passphrases: "{{ vault_luks_passphrases }}"
+workstation_user: "{{ vault_workstation_user }}"
+workstation_password: "{{ vault_workstation_password }}"

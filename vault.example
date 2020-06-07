@@ -1,0 +1,7 @@
+---
+vault_wifi_ssid: wifi
+vault_wifi_passphrase: password
+vault_luks_passphrases:
+  - password
+vault_workstation_user: user
+vault_workstation_password: password

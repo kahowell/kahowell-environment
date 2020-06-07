@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  roles:
+    - workstation_user
+    - kde_user
+    - dotfiles
+  tags:
+    - user

@@ -1,0 +1,34 @@
+---
+- name: Lookup latest uBlock Origin release
+  uri:
+    url: https://api.github.com/repos/gorhill/uBlock/releases/latest
+    return_content: yes
+  register: ublock_release
+  tags:
+    - workstation_user
+    - ublock
+
+- name: Create firefox extensions folder
+  file:
+    path: "{{ ansible_user_dir }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+    state: directory
+  tags:
+    - workstation_user
+    - ublock
+
+- name: Install uBlock Origin in firefox
+  get_url:
+    url: "{{ ublock_release.json.body | regex_search('https://addons.mozilla.org/.*xpi') }}"
+    dest: "{{ ansible_user_dir }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/uBlock0@raymondhill.net.xpi"
+  when: ublock_release.json.body is defined
+  tags:
+    - workstation_user
+    - ublock
+
+- name: Create ~/.gitconfig
+  template:
+    src: gitconfig.j2
+    dest: "{{ ansible_user_dir }}/.gitconfig"
+  when: git_config_user_email is defined and git_config_user_name is defined
+  tags:
+    - workstation_user

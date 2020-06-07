@@ -1,5 +1,4 @@
 ---
-# tasks file for virtualbox
 - name: Install VirtualBox
   become: yes
   package:
@@ -8,16 +7,22 @@
       - kernel-devel
       - kernel-devel-{{ ansible_kernel }}
       - VirtualBox
+  tags:
+    - virtualbox
 
 - name: Build VirtualBox kernel modules via akmods
   become: yes
   command: akmods
+  tags:
+    - virtualbox
 
 - name: Load VirtualBox kernel modules
   become: yes
   service:
     name: systemd-modules-load
     state: restarted
+  tags:
+    - virtualbox
 
 - name: Add workstation user to vboxusers group
   become: yes
@@ -25,3 +30,5 @@
     name: "{{ workstation_user }}"
     groups: vboxusers
     append: yes
+  tags:
+    - virtualbox

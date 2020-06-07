@@ -1,0 +1,4 @@
+---
+- name: nmcli connection reload
+  become: yes
+  command: nmcli connection reload

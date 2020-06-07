@@ -1,0 +1,9 @@
+ESSID={{ wifi_ssid }}
+MODE=Managed
+KEY_MGMT=WPA-PSK
+TYPE=Wireless
+BOOTPROTO=dhcp
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME={{ wifi_ssid }}
+UUID={{ wifi_ssid | to_uuid }}
+ONBOOT=yes

@@ -1,0 +1,29 @@
+- name: Setup networking
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - wifi-client
+
+- name: Wait for networking
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Wait for network connectivity
+      wait_for:
+        path: /etc/resolv.conf
+        search_regex: ^nameserver
+      tags:
+        - wait
+
+- name: Make system-level changes
+  hosts: localhost
+  roles:
+    - luks
+    - workstation
+  tags:
+    - system
+
+- name: Setup user-level changes
+  become: yes
+  become_user: "{{ workstation_user }}"
+  import_playbook: setup_user.yml

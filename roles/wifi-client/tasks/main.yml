@@ -1,0 +1,22 @@
+---
+- name: Add wifi connection details
+  become: yes
+  template:
+    src: ifcfg.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-{{ wifi_ssid }}
+    mode: 0644
+  notify: nmcli connection reload
+  tags:
+    - wifi
+    - wifi-client
+
+- name: Add wifi passphrase
+  become: yes
+  copy:
+    content: 'WPA_PSK="{{ wifi_passphrase }}"'
+    dest: /etc/sysconfig/network-scripts/keys-{{ wifi_ssid }}
+    mode: 0600
+  notify: nmcli connection reload
+  tags:
+    - wifi
+    - wifi-client

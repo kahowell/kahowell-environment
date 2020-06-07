@@ -1,3 +1,0 @@
----
-# defaults file for ansible
-ansible_automation_repo: git@github.com:kahowell/ansible-kahowell.git

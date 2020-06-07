@@ -1,5 +1,4 @@
 ---
-# tasks file for workstation
 - name: Add rpmfusion repos
   become: yes
   package:
@@ -40,6 +39,7 @@
     src: /var/lib/snapd/snap
     dest: /snap
     state: link
+  when: workstation_use_snapd
 
 - name: Install snaps
   become: yes
@@ -61,36 +61,3 @@
     name: "{{ workstation_user }}"
     groups: wheel
     append: yes
-
-- include: kde.yml
-- include: dotfiles.yml
-
-- name: Lookup latest uBlock Origin release
-  uri:
-    url: https://api.github.com/repos/gorhill/uBlock/releases/latest
-    return_content: yes
-  register: ublock_release
-  tags:
-    - ublock
-
-- name: Create firefox extensions folder
-  file:
-    path: /home/{{ workstation_user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}
-    state: directory
-  tags:
-    - ublock
-
-- name: Install uBlock Origin in firefox
-  get_url:
-    url: "{{ ublock_release.json.body | regex_search('https://addons.mozilla.org/.*xpi') }}"
-    dest: /home/{{ workstation_user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/uBlock0@raymondhill.net.xpi
-  tags:
-    - ublock
-
-- name: Create ~/.gitconfig
-  become: yes
-  become_user: "{{ workstation_user }}"
-  template:
-    src: gitconfig.j2
-    dest: /home/{{ workstation_user }}/.gitconfig
-  when: git_config_user_email is defined and git_config_user_name is defined

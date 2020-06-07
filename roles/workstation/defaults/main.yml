@@ -1,13 +1,5 @@
 ---
-# defaults file for workstation
-workstation_dotfiles_repo: git@github.com:kahowell/dotfiles.git
-
 workstation_enable_rpmfusion: true
-
-workstation_kde_packages:
-  - "@KDE Plasma Workspaces"
-  - sddm
-  - yakuake
 
 workstation_packages:
   - ansible
@@ -22,6 +14,7 @@ workstation_packages:
   - snapd
   - thunderbird
   - vagrant-libvirt
+  - vagrant-sshfs
   - vim
   - virt-manager
   - vlc
@@ -36,6 +29,3 @@ workstation_snaps:
 workstation_use_jetbrains_toolbox: false
 workstation_use_snapd: true
 workstation_use_virtualbox: true
-
-# assume we're running from a non-root user of the same username
-workstation_user: "{{ ansible_user_id }}"

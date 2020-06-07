@@ -1,0 +1,46 @@
+---
+- name: Create tempdir for luks passphrases
+  become: yes
+  tempfile:
+    state: directory
+  register: tempdir
+  tags:
+    - luks
+
+- name: Land dummy luks passphrase in /tmp
+  become: yes
+  copy:
+    content: password
+    dest: "{{ tempdir.path }}/dummy"
+    mode: 0600
+  when: tempdir.path is defined
+  tags:
+    - luks
+
+- name: Land copies of luks passphrases in /tmp
+  become: yes
+  copy:
+    content: "{{ item }}"
+    dest: "{{ tempdir.path }}/{{ item | to_uuid }}"
+    mode: 0600
+  with_items: "{{ luks_passphrases }}"
+  no_log: yes
+  when: tempdir.path is defined
+  tags:
+    - luks
+
+- name: Create/update/remove luks passphrases
+  become: yes
+  script: update_luks_keys.py {{ tempdir.path }}
+  when: tempdir.path is defined
+  tags:
+    - luks
+
+- name: Remove tempdir
+  become: yes
+  file:
+    path: "{{ tempdir.path }}"
+    state: absent
+  when: tempdir.path is defined
+  tags:
+    - luks
