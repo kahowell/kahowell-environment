@@ -6,11 +6,14 @@ workstation_packages:
   - code
   - chromium
   - discord
+  - duplicity
   - firefox
   - git
+  - hexchat
   - kernel-modules-{{ ansible_kernel }}
   - kernel-modules
   - libvirt-client
+  - meld
   - snapd
   - thunderbird
   - vagrant-libvirt

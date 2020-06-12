@@ -1,0 +1,8 @@
+[Unit]
+Description=Duplicity backup of home directory
+
+[Service]
+ExecStart={{ ansible_user_dir }}/bin/backup
+
+[Install]
+WantedBy=default.target

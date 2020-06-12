@@ -1,0 +1,8 @@
+#!/bin/bash
+export PASSPHRASE=none
+export SIGN_PASSPHRASE=none
+export GOOGLE_DRIVE_SETTINGS={{ ansible_user_dir }}/.duplicity_gdrive_creds
+{% for destination in duplicity_destinations %}
+echo Backing up to {{ destination }}
+/usr/bin/duplicity --full-if-older-than={{ duplicity_full_backup_period }} -vi --exclude-filelist={{ ansible_user_dir }}/.duplicityexclude --sign-key={{ duplicity_system_key }} --encrypt-key={{ duplicity_system_key }} {% for key in duplicity_keys %}--encrypt-key={{ key }} {% endfor %}{{ ansible_user_dir }} {{ destination }}
+{% endfor %}

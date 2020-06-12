@@ -55,9 +55,10 @@
   with_items: "{{ workstation_snaps_classic }}"
   when: workstation_use_snapd
 
-- name: Create an admin user, append to wheel group
+- name: Create workstation user, append to wheel group
   become: yes
   user:
     name: "{{ workstation_user }}"
+    password: "{{ workstation_password | password_hash('sha512', 65534 | random(seed=ansible_machine_id) | string) }}"
     groups: wheel
     append: yes

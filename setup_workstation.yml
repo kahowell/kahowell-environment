@@ -20,10 +20,13 @@
   roles:
     - luks
     - workstation
-  tags:
-    - system
 
 - name: Setup user-level changes
+  hosts: localhost
   become: yes
   become_user: "{{ workstation_user }}"
-  import_playbook: setup_user.yml
+  roles:
+    - dotfiles
+    - duplicity
+    - kde_user
+    - workstation_user

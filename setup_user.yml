@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Setup user-level changes
+  hosts: localhost
   roles:
-    - workstation_user
-    - kde_user
     - dotfiles
-  tags:
-    - user
+    - duplicity
+    - kde_user
+    - workstation_user

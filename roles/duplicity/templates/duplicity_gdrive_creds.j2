@@ -1,0 +1,8 @@
+client_config_backend: settings
+client_config:
+    client_id: {{ duplicity_gdrive_oauth_client_id }}
+    client_secret: {{ duplicity_gdrive_oauth_client_secret }}
+save_credentials: True
+save_credentials_backend: file
+save_credentials_file: {{ ansible_user_dir }}/.duplicity_gdrive_saved_creds
+get_refresh_token: True

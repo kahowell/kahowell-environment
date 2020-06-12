@@ -17,16 +17,21 @@ iconmanager.writeConfig('launchers', [
     'applications:discord.desktop',
     'applications:spotify_spotify.desktop',
     'applications:code.desktop',
-{% if workstation_use_jetbrains_toolbox %}
+{% if lookup('fileglob', ansible_user_dir + '/.local/share/applications/jetbrains-pycharm.desktop') | length %}
     'applications:jetbrains-pycharm.desktop',
-    'applications:jetbrains-idea.desktop',
-    'applications:jetbrains-datagrip.desktop',
 {% else %}
     'applications:pycharm-community_pycharm-community.desktop',
+{% endif %}
+{% if lookup('fileglob', ansible_user_dir + '/.local/share/applications/jetbrains-idea.desktop') | length %}
+    'applications:jetbrains-idea.desktop',
+{% else %}
     'applications:intellij-idea-community_intellij-idea-community.desktop',
 {% endif %}
+{% if lookup('fileglob', ansible_user_dir + '/.local/share/applications/jetbrains-datagrip.desktop') | length %}
+    'applications:jetbrains-datagrip.desktop',
+{% endif %}
     'applications:virt-manager.desktop',
-{% if workstation_use_virtualbox %}
+{% if lookup('fileglob', '/usr/share/applications/virtualbox.desktop') | length %}
     'applications:virtualbox.desktop',
 {% endif %}
 ])

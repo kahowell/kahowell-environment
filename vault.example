@@ -5,3 +5,11 @@ vault_luks_passphrases:
   - password
 vault_workstation_user: user
 vault_workstation_password: password
+vault_duplicity_destinations:
+  - file:///storage/backups/{{ ansible_fqdn }}
+  - pydrive:///jane@example.com/backups/{{ ansible_fqdn }}
+vault_duplicity_keys:
+  - jane@example.com
+  - joe@example.com
+vault_duplicity_gdrive_oauth_client_secret: client_secret.apps.googleusercontent.com
+vault_duplicity_gdrive_oauth_client_id: client_id

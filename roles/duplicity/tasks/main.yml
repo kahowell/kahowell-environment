@@ -1,0 +1,64 @@
+---
+- name: Downgrade httplib2 to workaround BZ#1830874
+  pip:
+    name: httplib2==0.15.0
+    extra_args: --user --upgrade
+  tags:
+    - duplicity
+
+- name: Generate gpg key for this system
+  command: gpg2 --batch --generate-key
+  args:
+    stdin: |
+      Key-Type: RSA
+      Key-Length: 4096
+      Key-Usage: encrypt,sign
+      %no-protection
+      Name-Real: {{ ansible_fqdn }}
+      Name-Comment: Duplicity key for machine {{ ansible_machine_id }}
+    creates: "{{ ansible_user_dir }}/.duplicity_key.gpg"
+  tags:
+    - duplicity
+
+- name: Touch marker to prevent regenerating duplicity gpg key
+  command: gpg2 --export --armor --output {{ ansible_user_dir }}/.duplicity_key.gpg {{ ansible_fqdn }}
+  args:
+    creates: "{{ ansible_user_dir }}/.duplicity_key.gpg"
+  tags:
+    - duplicity
+
+- name: Read system key fingerprint
+  command: gpg2 --list-keys --with-colons {{ ansible_fqdn }}
+  register: duplicity_system_key_output
+  tags:
+    - duplicity
+
+- name: Set system key fact
+  set_fact:
+    duplicity_system_key: "{{ duplicity_system_key_output.stdout | regex_search('fpr:*(?P<fingerprint>[A-Z0-9]*)', '\\g<fingerprint>') | first }}"
+  tags:
+    - duplicity
+
+- name: Create wrapper script for backup
+  template:
+    src: "backup.j2"
+    dest: "{{ ansible_user_dir }}/bin/backup"
+    mode: 0700
+  tags:
+    - duplicity
+
+- name: Create Google Drive OAuth config
+  template:
+    src: duplicity_gdrive_creds.j2
+    dest: "{{ ansible_user_dir }}/.duplicity_gdrive_creds"
+    mode: 0600
+  tags:
+    - duplicity
+
+- name: Create systemd user unit to perform backup
+  template:
+    src: backup-job.service.j2
+    dest: "{{ ansible_user_dir }}/.config/systemd/user/backup-job.service"
+  notify: systemctl --user daemon-reload
+  tags:
+    - duplicity
