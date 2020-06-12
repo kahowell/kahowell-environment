@@ -1,4 +1,4 @@
-# Ansible Collection - kahowell.home
+# Ansible - kahowell
 
 Automation used to maintain my Fedora-based workstation setup. Use at your own risk.
 
