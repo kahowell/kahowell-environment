@@ -25,6 +25,27 @@
     - workstation_user
     - ublock
 
+- name: Install vscode extensions
+  command: code --install-extension {{ item }}
+  args:
+    creates: "{{ ansible_user_dir }}/.vscode/extensions/{{ item }}*"
+  with_items:
+    - golang.go
+    - ms-dotnettools.csharp
+    - ms-python.python
+    - ms-vscode.cpptools
+    - ms-vsliveshare.vsliveshare
+    - ms-vsliveshare.vsliveshare-audio
+    - redhat.java
+    - redhat.vscode-openshift-extension-pack
+    - redhat.vscode-xml
+    - redhat.vscode-yaml
+    - rust-lang.rust
+    - vscoss.vscode-ansible
+  tags:
+    - vscode
+    - workstation_user
+
 - name: Create ~/.gitconfig
   template:
     src: gitconfig.j2
