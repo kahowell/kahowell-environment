@@ -30,8 +30,10 @@
   args:
     creates: "{{ ansible_user_dir }}/.vscode/extensions/{{ item }}*"
   with_items:
+    - github.vscode-pull-request-github
     - golang.go
     - ms-dotnettools.csharp
+    - ms-ossdata.vscode-postgresql
     - ms-python.python
     - ms-vscode.cpptools
     - ms-vsliveshare.vsliveshare
@@ -40,6 +42,7 @@
     - redhat.vscode-openshift-extension-pack
     - redhat.vscode-xml
     - redhat.vscode-yaml
+    - sonarsource.sonarlint-vscode
     - rust-lang.rust
     - vscoss.vscode-ansible
   tags:
