@@ -96,3 +96,5 @@
   loop_control:
     loop_var: workstation_user
   no_log: yes
+  tags:
+    - users
