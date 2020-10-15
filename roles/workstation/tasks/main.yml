@@ -1,4 +1,12 @@
 ---
+- name: Set hostname
+  become: yes
+  hostname:
+    name: "{{ hostname }}"
+  when: hostname is defined
+  tags:
+    - hostname
+
 - name: Lock root user password
   become: yes
   user:
