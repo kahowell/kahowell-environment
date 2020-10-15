@@ -99,6 +99,7 @@
     password: "{{ workstation_user.value.password | password_hash('sha512', 65534 | random(seed=ansible_machine_id) | string) }}"
     groups: wheel
     append: yes
+    ssh_key_comment: "{{ workstation_user.key }} on {{ ansible_product_version }}"
     generate_ssh_key: yes
   loop: "{{ workstation_users | dict2items }}"
   loop_control:
