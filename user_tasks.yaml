@@ -1,0 +1,7 @@
+---
+- include_role:
+    name: dotfiles
+- include_role:
+    name: kde_user
+- include_role:
+    name: workstation_user

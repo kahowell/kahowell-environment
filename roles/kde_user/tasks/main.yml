@@ -1,7 +1,14 @@
 ---
 - name: Create autostart directory
   file:
-    dest: "{{ ansible_user_dir }}/.config/autostart"
+    dest: "/home/{{ user }}/.config/autostart"
+    state: directory
+  tags:
+    - kde
+
+- name: Create autostart-scripts directory
+  file:
+    dest: "/home/{{ user }}/.config/autostart-scripts"
     state: directory
   tags:
     - kde
@@ -9,7 +16,7 @@
 - name: Make yakuake autostart
   file:
     src: /usr/share/applications/org.kde.yakuake.desktop
-    dest: "{{ ansible_user_dir }}/.config/autostart/org.kde.yakuake.desktop"
+    dest: "/home/{{ user }}/.config/autostart/org.kde.yakuake.desktop"
     state: link
   tags:
     - kde
@@ -17,14 +24,14 @@
 - name: Configure yakuake
   copy:
     src: yakuakerc
-    dest: "{{ ansible_user_dir }}/.config/yakuakerc"
+    dest: "/home/{{ user }}/.config/yakuakerc"
   tags:
     - kde
 
 - name: Copy plasma config script
   copy:
     src: configure_plasma.sh
-    dest: "{{ ansible_user_dir }}/.config/autostart-scripts/configure_plasma.sh"
+    dest: "/home/{{ user }}/.config/autostart-scripts/configure_plasma.sh"
     mode: 0744
   tags:
     - kde
@@ -33,13 +40,13 @@
 - name: Copy plasma config javascript
   template:
     src: kde_menu_config.js.j2
-    dest: "{{ ansible_user_dir }}/.config/kde_menu_config.js"
+    dest: "/home/{{ user }}/.config/kde_menu_config.js"
   tags:
     - kde
     - plasma
 
 - name: Configure menus (if running)
-  command: "{{ ansible_user_dir }}/.config/autostart-scripts/configure_plasma.sh"
+  command: "/home/{{ user }}/.config/autostart-scripts/configure_plasma.sh"
   tags:
     - kde
     - plasma

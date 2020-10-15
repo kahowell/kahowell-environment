@@ -1,11 +1,11 @@
 - name: Checkout dotfiles
   git:
     repo: "{{ dotfiles_repo }}"
-    dest: "{{ ansible_user_dir }}/dotfiles"
+    dest: "/home/{{ user }}/dotfiles"
   tags:
     - dotfiles
 
 - name: Install dotfiles symlinks
-  script: install_dotfiles.py {{ ansible_user_dir }}/dotfiles {{ ansible_user_dir }}
+  script: install_dotfiles.py /home/{{ user }}/dotfiles /home/{{ user }}
   tags:
     - dotfiles

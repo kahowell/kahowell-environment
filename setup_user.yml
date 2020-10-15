@@ -1,8 +1,10 @@
 ---
 - name: Setup user-level changes
   hosts: localhost
-  roles:
-    - dotfiles
-    - duplicity
-    - kde_user
-    - workstation_user
+  tasks:
+    - include_tasks:
+        file: user_tasks.yaml
+        apply:
+          vars:
+            user: "{{ ansible_user }}"
+            user_details: "{{ workstation_users[ansible_user] }}"

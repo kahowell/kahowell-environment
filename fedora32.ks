@@ -2,13 +2,13 @@
 install cdrom
 
 # do graphical installation
-graphical
+text
 
-# only touch nvme drives
-ignoredisk --only-use=nvme01
+# only touch nvme drive
+ignoredisk --only-use=nvme0n1
 
 # setup gpt
-clearpart --disklabel gpt
+clearpart --disklabel gpt --all
 
 # clear disk
 zerombr
@@ -37,6 +37,8 @@ timezone America/New_York --ntpservers=pool.ntp.org
 %packages
 @core
 @standard
+@hardware-support
+NetworkManager-wifi
 
 %end
 
@@ -47,7 +49,12 @@ timezone America/New_York --ntpservers=pool.ntp.org
 %post
 # unlock root without a pw for now
 passwd -d root
-echo "test -e /dev/disk/by-label/f32_install && mount /dev/disk/by-label/f32_install /mnt && /mnt/bootstrap.sh"
+
+echo "test -f /root/bootstrapped || (test -e /dev/disk/by-label/f32_install && mount /dev/disk/by-label/f32_install /mnt && /mnt/ansible-kahowell/bootstrap.sh && touch /root/bootstrapped; umount /mnt)" >> /root/.bashrc
+cat << EOF > /etc/NetworkManager/conf.d/99-iwd.conf
+[device]
+wifi.backend=iwd
+EOF
 
 %end
 

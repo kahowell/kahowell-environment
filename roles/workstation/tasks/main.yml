@@ -1,10 +1,17 @@
 ---
+- name: Lock root user password
+  become: yes
+  user:
+    name: root
+    password_lock: true
+
 - name: Add rpmfusion repos
   become: yes
-  package:
+  dnf:
     name:
       - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_version }}.noarch.rpm
       - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm
+    disable_gpg_check: yes
   when: workstation_enable_rpmfusion
 
 - name: Add VS Code repo key
@@ -55,10 +62,34 @@
   with_items: "{{ workstation_snaps_classic }}"
   when: workstation_use_snapd
 
-- name: Create workstation user, append to wheel group
+- name: Add extra ca certs to certs directory
+  become: yes
+  copy:
+    content: "{{ cert.value }}"
+    dest: /etc/pki/tls/certs/{{ cert.key }}
+  loop: "{{ workstation_extra_ca_certs | dict2items }}"
+  loop_control:
+    loop_var: cert
+
+- name: Add extra ca certs to ca-trust
+  become: yes
+  copy:
+    content: "{{ cert.value }}"
+    dest: /etc/pki/ca-trust/source/anchors/{{ cert.key }}
+  loop: "{{ workstation_extra_ca_certs | dict2items }}"
+  loop_control:
+    loop_var: cert
+  notify: update-ca-trust
+
+- name: Create workstation users, append to wheel group
   become: yes
   user:
-    name: "{{ workstation_user }}"
-    password: "{{ workstation_password | password_hash('sha512', 65534 | random(seed=ansible_machine_id) | string) }}"
+    name: "{{ workstation_user.key }}"
+    uid: "{{ workstation_user.value.uid | default(omit) }}"
+    password: "{{ workstation_user.value.password | password_hash('sha512', 65534 | random(seed=ansible_machine_id) | string) }}"
     groups: wheel
     append: yes
+  loop: "{{ workstation_users | dict2items }}"
+  loop_control:
+    loop_var: workstation_user
+  no_log: yes

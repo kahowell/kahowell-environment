@@ -1,0 +1,16 @@
+---
+- name: install packages
+  become: yes
+  package:
+    name: NetworkManager-openvpn
+
+- name: install openvpn profiles
+  become: yes
+  copy:
+    content: "{{ openvpn_profile.value }}"
+    dest: /etc/NetworkManager/system-connections/{{ openvpn_profile.key }}
+    mode: 0400
+  loop: "{{ openvpn_profiles | dict2items }}"
+  loop_control:
+    loop_var: openvpn_profile
+  notify: nmcli connection reload

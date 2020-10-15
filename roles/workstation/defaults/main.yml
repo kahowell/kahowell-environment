@@ -32,3 +32,4 @@ workstation_snaps:
 workstation_use_jetbrains_toolbox: false
 workstation_use_snapd: true
 workstation_use_virtualbox: true
+workstation_extra_ca_certs: {}

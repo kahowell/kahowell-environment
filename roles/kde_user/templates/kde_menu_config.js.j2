@@ -55,7 +55,9 @@ iconmanager.writeConfig('launchers', [
     'applications:mozilla-thunderbird.desktop',
     'applications:io.github.Hexchat.desktop',
     'applications:discord.desktop',
+{% if spotify_desktop_file %}
     'applications:{{ spotify_desktop_file | basename }}',
+{% endif %}
     'applications:code.desktop',
 {% for desktop_file in [pycharm_desktop_file, intellij_desktop_file, datagrip_desktop_file] %}
 {% if desktop_file %}

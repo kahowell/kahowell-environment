@@ -19,14 +19,23 @@
   hosts: localhost
   roles:
     - luks
+    - kde
     - workstation
+    - openvpn
 
 - name: Setup user-level changes
   hosts: localhost
-  become: yes
-  become_user: "{{ workstation_user }}"
-  roles:
-    - dotfiles
-    - duplicity
-    - kde_user
-    - workstation_user
+  tasks:
+    - include_tasks:
+        file: user_tasks.yaml
+        apply:
+          become: yes
+          become_user: "{{ workstation_user.key }}"
+          vars:
+            user: "{{ workstation_user.key }}"
+            user_details: "{{ workstation_user.value }}"
+      loop: "{{ workstation_users | dict2items }}"
+      loop_control:
+        loop_var: workstation_user
+      tags:
+        - workstation_user

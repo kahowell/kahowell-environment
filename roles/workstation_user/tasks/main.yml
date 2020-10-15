@@ -10,7 +10,7 @@
 
 - name: Create firefox extensions folder
   file:
-    path: "{{ ansible_user_dir }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+    path: "/home/{{ user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
     state: directory
   tags:
     - workstation_user
@@ -19,7 +19,7 @@
 - name: Install uBlock Origin in firefox
   get_url:
     url: "{{ ublock_release.json.body | regex_search('https://addons.mozilla.org/.*xpi') }}"
-    dest: "{{ ansible_user_dir }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/uBlock0@raymondhill.net.xpi"
+    dest: "/home/{{ user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/uBlock0@raymondhill.net.xpi"
   when: ublock_release.json.body is defined
   tags:
     - workstation_user
@@ -28,7 +28,7 @@
 - name: Install vscode extensions
   command: code --install-extension {{ item }}
   args:
-    creates: "{{ ansible_user_dir }}/.vscode/extensions/{{ item }}*"
+    creates: "/home/{{ user }}/.vscode/extensions/{{ item }}*"
   with_items:
     - github.vscode-pull-request-github
     - golang.go
@@ -52,7 +52,7 @@
 - name: Create ~/.gitconfig
   template:
     src: gitconfig.j2
-    dest: "{{ ansible_user_dir }}/.gitconfig"
-  when: git_config_user_email is defined and git_config_user_name is defined
+    dest: "/home/{{ user }}/.gitconfig"
+  when: user_details.email is defined and user_details.full_name is defined
   tags:
     - workstation_user

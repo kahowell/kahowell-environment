@@ -29,3 +29,13 @@
     state: started
   tags:
     - kde
+
+- name: Ensure default.target is graphical
+  become: yes
+  file:
+    src: /usr/lib/systemd/system/graphical.target
+    dest: /etc/systemd/system/default.target
+    state: link
+  notify: systemctl daemon-reload
+  tags:
+    - kde
