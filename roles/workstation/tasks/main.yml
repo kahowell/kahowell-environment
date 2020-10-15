@@ -7,6 +7,15 @@
   tags:
     - hostname
 
+- name: Disable sshd
+  become: yes
+  service:
+    name: sshd
+    enabled: no
+    state: stopped
+  tags:
+    - sshd
+
 - name: Lock root user password
   become: yes
   user:
