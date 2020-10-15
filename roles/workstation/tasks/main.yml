@@ -39,6 +39,8 @@
   become: yes
   package:
     name: "{{ workstation_packages }}"
+  tags:
+    - packages
 
 - name: Enable classic snap support
   become: yes
@@ -89,6 +91,7 @@
     password: "{{ workstation_user.value.password | password_hash('sha512', 65534 | random(seed=ansible_machine_id) | string) }}"
     groups: wheel
     append: yes
+    generate_ssh_key: yes
   loop: "{{ workstation_users | dict2items }}"
   loop_control:
     loop_var: workstation_user

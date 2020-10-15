@@ -16,6 +16,7 @@ workstation_packages:
   - meld
   - snapd
   - thunderbird
+  - tig
   - vagrant-libvirt
   - vagrant-sshfs
   - vim
