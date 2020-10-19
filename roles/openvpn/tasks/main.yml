@@ -3,6 +3,8 @@
   become: yes
   package:
     name: NetworkManager-openvpn
+  tags:
+    - openvpn
 
 - name: install openvpn profiles
   become: yes
@@ -14,3 +16,5 @@
   loop_control:
     loop_var: openvpn_profile
   notify: nmcli connection reload
+  tags:
+    - openvpn

@@ -127,6 +127,8 @@
   loop: "{{ workstation_extra_ca_certs | dict2items }}"
   loop_control:
     loop_var: cert
+  tags:
+    - ca
 
 - name: Add extra ca certs to ca-trust
   become: yes
@@ -137,6 +139,8 @@
   loop_control:
     loop_var: cert
   notify: update-ca-trust
+  tags:
+    - ca
 
 - name: Start thunderbolt daemon
   become: yes
