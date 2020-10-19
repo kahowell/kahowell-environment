@@ -22,6 +22,14 @@
     name: root
     password_lock: true
 
+- name: Remove bootstrap repo
+  become: yes
+  file:
+    path: /etc/yum.repos.d/ansible.repo
+    state: absent
+  tags:
+    - packages
+
 - name: Add rpmfusion repos
   become: yes
   dnf:
@@ -30,11 +38,15 @@
       - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm
     disable_gpg_check: yes
   when: workstation_enable_rpmfusion
+  tags:
+    - packages
 
 - name: Add VS Code repo key
   become: yes
   rpm_key:
     key: https://packages.microsoft.com/keys/microsoft.asc
+  tags:
+    - packages
 
 - name: Add VS Code repo
   become: yes
@@ -45,17 +57,43 @@
     gpgcheck: yes
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     file: vscode
+  tags:
+    - packages
 
 - name: Update installed packages
   become: yes
   package:
     name: "*"
     state: latest
+  tags:
+    - packages
 
 - name: Install packages
   become: yes
   package:
     name: "{{ workstation_packages }}"
+  tags:
+    - packages
+
+- name: Add flathub
+  become: yes
+  flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+  when: workstation_use_flatpak
+  tags:
+    - packages
+
+- name: Install flatpaks
+  become: yes
+  flatpak:
+    name: "{{ flatpak }}"
+    state: present
+  loop: "{{ workstation_flatpaks }}"
+  loop_control:
+    loop_var: flatpak
+  when: workstation_use_flatpak
   tags:
     - packages
 
@@ -99,6 +137,22 @@
   loop_control:
     loop_var: cert
   notify: update-ca-trust
+
+- name: Start thunderbolt daemon
+  become: yes
+  service:
+    name: bolt
+    enabled: yes
+    state: started
+  tags:
+    - thunderbolt
+
+- name: Allow wheel to manage libvirt without password
+  become: yes
+  copy:
+    src: 50-libvirt.rules
+    dest: /etc/polkit-1/rules.d/50-libvirt.rules
+    mode: 0444
 
 - name: Create workstation users, append to wheel group
   become: yes

@@ -1,7 +1,11 @@
 ---
 - include_role:
-    name: dotfiles
-- include_role:
-    name: kde_user
-- include_role:
-    name: workstation_user
+    name: "{{ role }}"
+  loop:
+    - dotfiles
+    - kde_user
+    - workstation_user
+  loop_control:
+    loop_var: role
+  tags:
+    - always

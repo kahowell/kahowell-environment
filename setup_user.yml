@@ -7,4 +7,6 @@
         apply:
           vars:
             user: "{{ ansible_user }}"
-            user_details: "{{ workstation_users[ansible_user] }}"
+            user_details: "{{ workstation_users[ansible_user] | default({}) }}"
+      tags:
+        - always

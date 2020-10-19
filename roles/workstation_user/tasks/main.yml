@@ -49,10 +49,24 @@
     - vscode
     - workstation_user
 
-- name: Create ~/.gitconfig
-  template:
-    src: gitconfig.j2
-    dest: "/home/{{ user }}/.gitconfig"
-  when: user_details.email is defined and user_details.full_name is defined
+- name: Set git name
+  git_config:
+    name: user.name
+    scope: global
+    value: "{{ user_details.full_name }}"
+  when: user_details is defined and user_details.full_name is defined
+
+- name: Set git email
+  git_config:
+    name: user.email
+    scope: global
+    value: "{{ user_details.email }}"
+  when: user_details is defined and user_details.email is defined
+
+- name: Set default git editor
+  git_config:
+    name: diff.tool
+    scope: global
+    value: meld
   tags:
     - workstation_user

@@ -3,3 +3,4 @@ kde_packages:
   - "@KDE Plasma Workspaces"
   - sddm
   - yakuake
+  - plasma-thunderbolt

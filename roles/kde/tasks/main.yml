@@ -5,6 +5,7 @@
     name: "{{ kde_packages }}"
   tags:
     - kde
+    - packages
 
 - name: Install sddm
   become: yes

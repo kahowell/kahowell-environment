@@ -40,6 +40,7 @@
 }, errors='ignore') %}
 var panel = panels().filter(panel => panel.location === 'bottom')[0]
 panel.hiding = 'autohide'
+panel.height = 64
 var taskmanager = panel.widgets('org.kde.plasma.taskmanager')[0]
 if (taskmanager) {
     print(taskmanager.launchers)

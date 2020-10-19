@@ -2,6 +2,7 @@
   git:
     repo: "{{ dotfiles_repo }}"
     dest: "/home/{{ user }}/dotfiles"
+    version: master
   tags:
     - dotfiles
 

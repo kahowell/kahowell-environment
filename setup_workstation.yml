@@ -34,7 +34,7 @@
           vars:
             user: "{{ workstation_user.key }}"
             user_details: "{{ workstation_user.value }}"
-      loop: "{{ workstation_users | dict2items }}"
+      loop: "{{ workstation_users | dict2items | default([]) }}"
       loop_control:
         loop_var: workstation_user
       tags:

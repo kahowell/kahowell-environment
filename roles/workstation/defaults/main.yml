@@ -8,12 +8,15 @@ workstation_packages:
   - discord
   - duplicity
   - firefox
+  - flatpak
   - git
   - hexchat
   - kernel-modules-{{ ansible_kernel }}
   - kernel-modules
   - libvirt-client
   - meld
+  - origin-clients
+  - podman
   - snapd
   - thunderbird
   - tig
@@ -30,7 +33,11 @@ workstation_snaps_classic:
 workstation_snaps:
   - spotify
 
-workstation_use_jetbrains_toolbox: false
-workstation_use_snapd: true
+workstation_flatpaks:
+  - com.spotify.Client
+
+workstation_use_jetbrains_toolbox: true
+workstation_use_snapd: false
+workstation_use_flatpak: true
 workstation_use_virtualbox: true
 workstation_extra_ca_certs: {}
