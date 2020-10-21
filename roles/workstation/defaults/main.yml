@@ -5,6 +5,7 @@ workstation_packages:
   - ansible
   - code
   - chromium
+  - direnv
   - discord
   - duplicity
   - firefox
