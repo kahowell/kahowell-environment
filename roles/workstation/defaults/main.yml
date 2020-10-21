@@ -11,20 +11,27 @@ workstation_packages:
   - flatpak
   - git
   - hexchat
+  - java-1.8.0-openjdk-devel
+  - java-11-openjdk-devel
+  - jq
   - kernel-modules-{{ ansible_kernel }}
   - kernel-modules
   - libvirt-client
   - meld
   - origin-clients
   - podman
+  - python3-devel
   - snapd
+  - task
   - thunderbird
   - tig
+  - tito
   - vagrant-libvirt
   - vagrant-sshfs
   - vim
   - virt-manager
   - vlc
+  - xclip
 
 workstation_snaps_classic:
   - pycharm-community
