@@ -3,8 +3,8 @@ workstation_enable_rpmfusion: true
 
 workstation_packages:
   - ansible
-  - code
   - chromium
+  - code
   - direnv
   - discord
   - duplicity
@@ -15,12 +15,13 @@ workstation_packages:
   - java-1.8.0-openjdk-devel
   - java-11-openjdk-devel
   - jq
-  - kernel-modules-{{ ansible_kernel }}
   - kernel-modules
+  - kernel-modules-{{ ansible_kernel }}
   - libvirt-client
   - meld
   - origin-clients
   - podman
+  - podman-compose
   - python3-devel
   - snapd
   - task
