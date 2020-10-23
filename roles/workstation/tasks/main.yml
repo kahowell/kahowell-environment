@@ -160,6 +160,14 @@
   tags:
     - thunderbolt
 
+- name: Set vim as system default editor
+  become: yes
+  lineinfile:
+    path: /etc/environment
+    line: EDITOR=vim
+  tags:
+    - vim
+
 - name: Allow wheel to manage libvirt without password
   become: yes
   copy:
