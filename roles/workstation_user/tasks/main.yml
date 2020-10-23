@@ -55,6 +55,8 @@
     scope: global
     value: "{{ user_details.full_name }}"
   when: user_details is defined and user_details.full_name is defined
+  tags:
+    - git
 
 - name: Set git email
   git_config:
@@ -62,11 +64,23 @@
     scope: global
     value: "{{ user_details.email }}"
   when: user_details is defined and user_details.email is defined
+  tags:
+    - git
 
-- name: Set default git editor
+- name: Set default git editor to vim
+  git_config:
+    name: core.editor
+    scope: global
+    value: vim
+  tags:
+    - workstation_user
+    - git
+
+- name: Set default git diff.tool to meld
   git_config:
     name: diff.tool
     scope: global
     value: meld
   tags:
     - workstation_user
+    - git
