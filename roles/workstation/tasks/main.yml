@@ -75,6 +75,15 @@
   tags:
     - packages
 
+- name: Automatically install updates
+  become: yes
+  service:
+    name: dnf-automatic-install.timer
+    enabled: yes
+    state: started
+  tags:
+    - packages
+
 - name: Add flathub
   become: yes
   flatpak_remote:

@@ -7,6 +7,7 @@ workstation_packages:
   - code
   - direnv
   - discord
+  - dnf-automatic
   - duplicity
   - firefox
   - flatpak
