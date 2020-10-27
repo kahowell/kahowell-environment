@@ -94,6 +94,14 @@
   tags:
     - packages
 
+- name: Install bitwarden CLI
+  become: yes
+  npm:
+    name: "@bitwarden/cli"
+    global: yes
+  tags:
+    - bitwarden
+
 - name: Install flatpaks
   become: yes
   flatpak:

@@ -1,0 +1,15 @@
+---
+- name: Lookup latest release
+  uri:
+    url: https://addons.mozilla.org/api/v4/addons/addon/{{ addon }}/
+    return_content: yes
+  register: addon_release
+  tags:
+    - firefox
+
+- name: Install addon in firefox
+  get_url:
+    url: "{{ addon_release.json.current_version.files[0].url }}"
+    dest: "/home/{{ user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/{{ addon_release.json.guid }}.xpi"
+  tags:
+    - firefox

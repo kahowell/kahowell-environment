@@ -1,29 +1,21 @@
 ---
-- name: Lookup latest uBlock Origin release
-  uri:
-    url: https://api.github.com/repos/gorhill/uBlock/releases/latest
-    return_content: yes
-  register: ublock_release
-  tags:
-    - workstation_user
-    - ublock
-
 - name: Create firefox extensions folder
   file:
     path: "/home/{{ user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
     state: directory
   tags:
     - workstation_user
-    - ublock
+    - firefox
 
-- name: Install uBlock Origin in firefox
-  get_url:
-    url: "{{ ublock_release.json.body | regex_search('https://addons.mozilla.org/.*xpi') }}"
-    dest: "/home/{{ user }}/.mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/uBlock0@raymondhill.net.xpi"
-  when: ublock_release.json.body is defined
+- name: Install firefox addons
+  include_tasks: install_firefox_addon.yml
+  loop:
+    - bitwarden-password-manager
+    - ublock-origin
+  loop_control:
+    loop_var: addon
   tags:
-    - workstation_user
-    - ublock
+    - firefox
 
 - name: Install vscode extensions
   command: code --install-extension {{ item }}

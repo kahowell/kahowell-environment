@@ -20,6 +20,7 @@ workstation_packages:
   - kernel-modules-{{ ansible_kernel }}
   - libvirt-client
   - meld
+  - npm
   - origin-clients
   - pipenv
   - podman
