@@ -25,6 +25,7 @@ workstation_packages:
   - pipenv
   - podman
   - podman-compose
+  - postgresql
   - python3-devel
   - snapd
   - task
@@ -36,6 +37,7 @@ workstation_packages:
   - vim
   - virt-manager
   - vlc
+  - vym
   - xclip
 
 workstation_snaps_classic:
