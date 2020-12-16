@@ -21,6 +21,7 @@ workstation_packages:
   - libvirt-client
   - meld
   - npm
+  - okteta
   - origin-clients
   - pipenv
   - podman
