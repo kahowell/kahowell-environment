@@ -8,6 +8,7 @@ workstation_packages:
   - direnv
   - discord
   - dnf-automatic
+  - dnf-plugin-system-upgrade
   - duplicity
   - firefox
   - flatpak
