@@ -6,7 +6,7 @@
         file: user_tasks.yaml
         apply:
           vars:
-            user: "{{ ansible_user }}"
-            user_details: "{{ workstation_users[ansible_user] | default({}) }}"
+            user: "{{ ansible_user_id }}"
+            user_details: "{{ workstation_users[ansible_user_id] | default({}) }}"
       tags:
         - always
