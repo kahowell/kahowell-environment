@@ -22,6 +22,7 @@
   args:
     creates: "/home/{{ user }}/.vscode/extensions/{{ item }}*"
   with_items:
+    - asciidoctor.asciidoctor-vscode
     - github.vscode-pull-request-github
     - golang.go
     - ms-dotnettools.csharp
