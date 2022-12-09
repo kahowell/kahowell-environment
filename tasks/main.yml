@@ -63,6 +63,7 @@
       - openssl
       - podman
       - podman-compose
+      - pre-commit
       - procps-ng
       - rclone
       - ripgrep
@@ -152,6 +153,7 @@
       - openshift-cli
       - quarkusio/tap/quarkus
       - rustup-init
+      - starship
       - stern
       - terraform
       - yq
