@@ -1,0 +1,156 @@
+---
+- name: Gather facts
+  ansible.builtin.gather_facts: {}
+
+- name: Add VirtualBox repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://www.virtualbox.org/download/oracle_vbox.asc
+    state: present
+
+- name: Add VirtualBox repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: virtualbox
+    description: VirtualBox
+    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
+    gpgcheck: true
+    gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
+
+- name: Add VS Code repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+
+- name: Add VS Code repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: code
+    description: Visual Studio Code
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+    gpgcheck: true
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    file: vscode
+
+- name: Remove unneeded packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - firefox
+      - xorg-x11-drv-intel
+    state: absent
+
+- name: Install packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - '@Development Tools'
+      - ansible
+      - bat
+      - code
+      - direnv
+      - dnf-automatic
+      - docker-compose
+      - git
+      - hadolint
+      - jq
+      - kernel-devel
+      - meld
+      - moby-engine
+      - ncdu
+      - nmap
+      - openssl
+      - podman
+      - podman-compose
+      - procps-ng
+      - rclone
+      - ripgrep
+      - tig
+      - vim
+      - virt-manager
+      - VirtualBox-7.0
+      - yakuake
+    state: present
+
+- name: Add flathub
+  become: true
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+
+- name: Install flatpaks
+  become: true
+  community.general.flatpak:
+    name:
+      - com.discordapp.Discord
+      - com.google.Chrome
+      - com.spotify.Client
+      - com.valvesoftware.Steam
+      - org.mozilla.Thunderbird
+      - org.mozilla.firefox
+      - org.videolan.VLC
+      - us.zoom.Zoom
+
+- name: Enable automatic dnf updates
+  become: true
+  ansible.builtin.systemd:
+    name: dnf-automatic-install
+    enabled: true
+
+- name: Start docker service
+  become: true
+  ansible.builtin.systemd:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Add user to groups
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups:
+      - docker
+      - libvirt
+    append: true
+
+- name: Create autostart directory
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/autostart"
+    state: directory
+
+- name: Set yakuake to autostart
+  ansible.builtin.file:
+    src: /usr/share/applications/org.kde.yakuake.desktop
+    dest: "{{ ansible_user_dir }}/.config/autostart/org.kde.yakuake.desktop"
+    state: link
+
+- name: Download homebrew install script
+  become: true
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/3e7999a7fb0e8f38248d61d081893a628d7b6885/install.sh
+    dest: /opt/install-homebrew.sh
+    checksum: sha256:41d5eb515a76b43e192259fde18e6cd683ea8b6a3d7873bcfc5065ab5b12235c
+
+- name: Run homebrew installer
+  ansible.builtin.command: bash -c 'NONINTERACTIVE=1 bash /opt/install-homebrew.sh'
+  args:
+    creates: /home/linuxbrew/.linuxbrew/bin/brew
+
+- name: Install homebrew packages
+  community.general.homebrew:
+    name:
+      - argocd
+      - chezmoi
+      - dive
+      - helm
+      - k3d
+      - k9s
+      - kind
+      - minikube
+      - openshift-cli
+      - rustup-init
+      - stern
+      - terraform
+      - yq
