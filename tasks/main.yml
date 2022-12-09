@@ -150,6 +150,7 @@
       - kind
       - minikube
       - openshift-cli
+      - quarkusio/tap/quarkus
       - rustup-init
       - stern
       - terraform
