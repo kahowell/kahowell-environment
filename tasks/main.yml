@@ -89,6 +89,7 @@
       - com.google.Chrome
       - com.spotify.Client
       - com.valvesoftware.Steam
+      - org.chromium.Chromium
       - org.mozilla.Thunderbird
       - org.mozilla.firefox
       - org.videolan.VLC
