@@ -90,6 +90,7 @@
       - com.google.Chrome
       - com.spotify.Client
       - com.valvesoftware.Steam
+      - net.cozic.joplin_desktop
       - org.chromium.Chromium
       - org.mozilla.Thunderbird
       - org.mozilla.firefox
