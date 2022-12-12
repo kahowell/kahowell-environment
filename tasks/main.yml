@@ -54,6 +54,7 @@
       - docker-compose
       - git
       - hadolint
+      - java-17-openjdk-devel
       - jq
       - kernel-devel
       - meld
