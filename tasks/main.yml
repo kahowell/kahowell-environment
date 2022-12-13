@@ -33,6 +33,12 @@
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     file: vscode
 
+- name: Add microshift repo
+  become: true
+  community.general.copr:
+    name: '@redhat-et/microshift'
+    state: enabled
+
 - name: Remove unneeded packages
   become: true
   ansible.builtin.dnf:
@@ -58,6 +64,7 @@
       - jq
       - kernel-devel
       - meld
+      - microshift
       - moby-engine
       - ncdu
       - nmap
