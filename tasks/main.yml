@@ -81,6 +81,7 @@
       - VirtualBox-7.0
       - wl-clipboard
       - yakuake
+      - yamllint
     state: present
 
 - name: Add flathub
@@ -160,6 +161,8 @@
       - k3d
       - k9s
       - kind
+      - kube-linter
+      - markdownlint-cli2
       - minikube
       - openshift-cli
       - quarkusio/tap/quarkus
@@ -167,4 +170,5 @@
       - starship
       - stern
       - terraform
+      - vale
       - yq
