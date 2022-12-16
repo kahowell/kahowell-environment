@@ -154,6 +154,7 @@
 - name: Install homebrew packages
   community.general.homebrew:
     name:
+      - aquasecurity/trivy/trivy
       - argocd
       - chezmoi
       - dive
