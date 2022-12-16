@@ -99,6 +99,7 @@
       - com.google.Chrome
       - com.spotify.Client
       - com.valvesoftware.Steam
+      - me.kozec.syncthingtk
       - net.cozic.joplin_desktop
       - org.chromium.Chromium
       - org.mozilla.Thunderbird
