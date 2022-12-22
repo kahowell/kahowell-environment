@@ -61,7 +61,9 @@
       - direnv
       - dnf-automatic
       - docker-compose
+      - dotnet
       - git
+      - golang
       - gtk3-devel
       - hadolint
       - java-17-openjdk-devel
@@ -73,6 +75,7 @@
       - ncdu
       - ninja-build
       - nmap
+      - nodejs
       - openssl
       - podman
       - podman-compose
