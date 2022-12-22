@@ -84,6 +84,7 @@
       - rclone
       - ripgrep
       - tig
+      - tlp
       - vim
       - virt-manager
       - VirtualBox-7.0
