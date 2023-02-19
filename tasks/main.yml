@@ -105,6 +105,7 @@
   become: true
   community.general.flatpak:
     name:
+      - ch.theologeek.Manuskript
       - com.discordapp.Discord
       - com.google.Chrome
       - com.spotify.Client
