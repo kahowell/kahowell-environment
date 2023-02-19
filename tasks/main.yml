@@ -91,6 +91,7 @@
       - wl-clipboard
       - yakuake
       - yamllint
+      - yubikey-manager
     state: present
 
 - name: Add flathub
