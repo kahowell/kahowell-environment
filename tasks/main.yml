@@ -19,6 +19,22 @@
     gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
   when: install_virtualbox
 
+- name: Add tailscale repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://pkgs.tailscale.com/stable/fedora/repo.gpg
+    state: present
+
+- name: Add tailscale repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: tailscale-stable
+    description: Tailscale stable
+    baseurl: https://pkgs.tailscale.com/stable/fedora/$basearch
+    gpgcheck: false
+    repo_gpgcheck: true
+    gpgkey: https://pkgs.tailscale.com/stable/fedora/repo.gpg
+
 - name: Add VS Code repo key
   become: true
   ansible.builtin.rpm_key:
@@ -87,6 +103,7 @@
       - python3-pip
       - rclone
       - ripgrep
+      - tailscale
       - tig
       - tlp
       - vim
