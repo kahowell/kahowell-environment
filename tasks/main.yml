@@ -74,6 +74,7 @@
       - android-tools
       - ansible
       - bat
+      - black
       - clang
       - cmake
       - code
@@ -98,9 +99,10 @@
       - openssl
       - podman
       - podman-compose
+      - poetry
       - pre-commit
       - procps-ng
-      - python3-pip
+      - protobuf-compiler
       - rclone
       - ripgrep
       - tailscale
