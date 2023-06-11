@@ -73,6 +73,8 @@
       - '@Development Tools'
       - android-tools
       - ansible
+      - ansible-lint
+      - asciinema
       - bat
       - black
       - clang
@@ -106,6 +108,7 @@
       - rclone
       - ripgrep
       - tailscale
+      - task
       - tig
       - tlp
       - vim
@@ -216,8 +219,10 @@
       - markdownlint-cli2
       - minikube
       - openshift-cli
+      - operator-sdk
       - quarkusio/tap/quarkus
       - rustup-init
+      - sops
       - starship
       - stern
       - terraform
