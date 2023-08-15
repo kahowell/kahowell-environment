@@ -225,7 +225,6 @@
       - sops
       - starship
       - stern
-      - terraform
       - vale
       - yq
   when: use_brew
