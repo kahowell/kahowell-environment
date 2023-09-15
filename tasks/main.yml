@@ -7,6 +7,7 @@
   ansible.builtin.rpm_key:
     key: https://www.virtualbox.org/download/oracle_vbox.asc
     state: present
+  when: install_virtualbox
 
 - name: Add VirtualBox repo
   become: true
@@ -16,6 +17,7 @@
     baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
     gpgcheck: true
     gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
+  when: install_virtualbox
 
 - name: Add VS Code repo key
   become: true
@@ -39,13 +41,14 @@
     name: '@redhat-et/microshift'
     state: enabled
 
-- name: Remove unneeded packages
+- name: Remove browser RPMs
   become: true
   ansible.builtin.dnf:
     name:
       - firefox
-      - xorg-x11-drv-intel
+      - google-chrome-stable
     state: absent
+  when: use_flatpak_browsers
 
 - name: Install packages
   become: true
@@ -87,12 +90,17 @@
       - tlp
       - vim
       - virt-manager
-      - VirtualBox-7.0
       - wl-clipboard
       - yakuake
       - yamllint
       - yubikey-manager
     state: present
+
+- name: Install VirtualBox
+  become: true
+  ansible.builtin.dnf:
+    name: VirtualBox-7.0
+  when: install_virtualbox
 
 - name: Add flathub
   become: true
@@ -107,22 +115,29 @@
     name:
       - ch.theologeek.Manuskript
       - com.discordapp.Discord
-      - com.google.Chrome
       - com.spotify.Client
       - com.valvesoftware.Steam
       - me.kozec.syncthingtk
       - net.cozic.joplin_desktop
-      - org.chromium.Chromium
       - org.mozilla.Thunderbird
-      - org.mozilla.firefox
       - org.videolan.VLC
       - us.zoom.Zoom
+
+- name: Install browsers via flatpak
+  become: true
+  community.general.flatpak:
+    name:
+      - com.google.Chrome
+      - org.chromium.Chromium
+      - org.mozilla.firefox
+  when: use_flatpak_browsers
 
 - name: Enable automatic dnf updates
   become: true
   ansible.builtin.systemd:
     name: dnf-automatic-install
     enabled: true
+  when: use_dnf_auto
 
 - name: Start docker service
   become: true
@@ -150,6 +165,7 @@
     src: /usr/share/applications/org.kde.yakuake.desktop
     dest: "{{ ansible_user_dir }}/.config/autostart/org.kde.yakuake.desktop"
     state: link
+  when: use_yakuake
 
 - name: Download homebrew install script
   become: true
@@ -157,11 +173,13 @@
     url: https://raw.githubusercontent.com/Homebrew/install/3e7999a7fb0e8f38248d61d081893a628d7b6885/install.sh
     dest: /opt/install-homebrew.sh
     checksum: sha256:41d5eb515a76b43e192259fde18e6cd683ea8b6a3d7873bcfc5065ab5b12235c
+  when: use_brew
 
 - name: Run homebrew installer
   ansible.builtin.command: bash -c 'NONINTERACTIVE=1 bash /opt/install-homebrew.sh'
   args:
     creates: /home/linuxbrew/.linuxbrew/bin/brew
+  when: use_brew
 
 - name: Install homebrew packages
   community.general.homebrew:
@@ -185,3 +203,4 @@
       - terraform
       - vale
       - yq
+  when: use_brew

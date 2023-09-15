@@ -1,2 +1,7 @@
 ---
 # defaults file for kahowell-laptop
+install_virtualbox: false
+use_flatpak_browsers: false
+use_dnf_auto: false
+use_yakuake: false
+use_brew: false
