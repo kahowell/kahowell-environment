@@ -84,6 +84,7 @@
       - podman-compose
       - pre-commit
       - procps-ng
+      - python3-pip
       - rclone
       - ripgrep
       - tig
