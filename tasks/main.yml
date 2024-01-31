@@ -94,7 +94,7 @@
       - meld
       - microshift
       - moby-engine
-      - mono
+      - mono-devel
       - ncdu
       - ninja-build
       - nmap
