@@ -140,7 +140,6 @@
       - com.discordapp.Discord
       - com.spotify.Client
       - com.valvesoftware.Steam
-      - me.kozec.syncthingtk
       - net.cozic.joplin_desktop
       - org.mozilla.Thunderbird
       - org.videolan.VLC
