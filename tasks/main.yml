@@ -106,6 +106,7 @@
       - pre-commit
       - procps-ng
       - protobuf-compiler
+      - python3-netaddr
       - rclone
       - ripgrep
       - tailscale
@@ -114,6 +115,7 @@
       - tlp
       - vim
       - virt-manager
+      - wireguard-tools
       - wl-clipboard
       - yakuake
       - yamllint
@@ -211,6 +213,7 @@
       - argocd
       - chezmoi
       - dive
+      - geckodriver
       - helm
       - k3d
       - k9s
