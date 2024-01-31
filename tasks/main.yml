@@ -109,6 +109,7 @@
       - python3-netaddr
       - rclone
       - ripgrep
+      - syncthing
       - tailscale
       - task
       - tig
