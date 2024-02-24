@@ -51,11 +51,17 @@
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     file: vscode
 
-- name: Add microshift repo
+- name: Remove microshift repo
   become: true
   community.general.copr:
     name: '@redhat-et/microshift'
-    state: enabled
+    state: absent
+
+- name: Remove microshift RPM
+  become: true
+  ansible.builtin.dnf:
+    name: microshift
+    state: absent
 
 - name: Remove browser RPMs
   become: true
