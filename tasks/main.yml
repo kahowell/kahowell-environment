@@ -111,6 +111,7 @@
       - pre-commit
       - procps-ng
       - protobuf-compiler
+      - python3-ansible-lint
       - python3-netaddr
       - rclone
       - ripgrep
