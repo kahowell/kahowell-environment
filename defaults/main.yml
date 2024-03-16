@@ -1,5 +1,5 @@
 ---
-# defaults file for kahowell-laptop
+# defaults file for kahowell-environment
 install_virtualbox: false
 use_flatpak_browsers: false
 use_dnf_auto: false

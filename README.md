@@ -1,12 +1,12 @@
-kahowell-laptop
-===============
+kahowell-environment
+====================
 
 Ansible role to manage my laptop setup. Feel free to reference or re-use (at your own risk).
 
-You can use this lazilly by installing in e.g. `~/.ansible/roles/kahowell-laptop` and then running:
+You can use this lazilly by installing in e.g. `~/.ansible/roles/kahowell-environment` and then running:
 
 ```
-ansible -K localhost -m include_role -a name=kahowell-laptop
+ansible -K localhost -m include_role -a name=kahowell-environment
 ```
 
 Requirements
@@ -30,7 +30,7 @@ Example Playbook
 ```
     - hosts: localhost
       roles:
-         - { role: kahowell-laptop }
+         - { role: kahowell-environment }
 ```
 
 License
