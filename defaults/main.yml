@@ -1,7 +1,9 @@
 ---
 # defaults file for kahowell-environment
-install_virtualbox: false
-use_flatpak_browsers: false
-use_dnf_auto: false
-use_yakuake: false
-use_brew: false
+kah_env_use_kde: true
+kah_env_use_tailscale: false
+kah_env_use_virtualbox: false
+kah_env_use_flatpak_browsers: false
+kah_env_use_dnf_auto: true
+kah_env_use_yakuake: false
+kah_env_use_brew: true

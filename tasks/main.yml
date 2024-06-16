@@ -2,12 +2,22 @@
 - name: Gather facts
   ansible.builtin.gather_facts: {}
 
+- name: Install desktop environment
+  become: true
+  ansible.builtin.dnf:
+    name: '@kde-desktop-environment'
+  when: kah_env_use_kde
+  tags:
+    - desktop
+
 - name: Add VirtualBox repo key
   become: true
   ansible.builtin.rpm_key:
     key: https://www.virtualbox.org/download/oracle_vbox.asc
     state: present
-  when: install_virtualbox
+  when: kah_env_use_virtualbox
+  tags:
+    - virtualbox
 
 - name: Add VirtualBox repo
   become: true
@@ -17,13 +27,18 @@
     baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
     gpgcheck: true
     gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
-  when: install_virtualbox
+  when: kah_env_use_virtualbox
+  tags:
+    - virtualbox
 
 - name: Add tailscale repo key
   become: true
   ansible.builtin.rpm_key:
     key: https://pkgs.tailscale.com/stable/fedora/repo.gpg
     state: present
+  when: kah_env_use_tailscale
+  tags:
+    - tailscale
 
 - name: Add tailscale repo
   become: true
@@ -34,12 +49,25 @@
     gpgcheck: false
     repo_gpgcheck: true
     gpgkey: https://pkgs.tailscale.com/stable/fedora/repo.gpg
+  when: kah_env_use_tailscale
+  tags:
+    - tailscale
+
+- name: Install tailscale
+  become: true
+  ansible.builtin.dnf:
+    name: tailscale
+  when: kah_env_use_tailscale
+  tags:
+    - tailscale
 
 - name: Add VS Code repo key
   become: true
   ansible.builtin.rpm_key:
     key: https://packages.microsoft.com/keys/microsoft.asc
     state: present
+  tags:
+    - packages
 
 - name: Add VS Code repo
   become: true
@@ -50,6 +78,8 @@
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     file: vscode
+  tags:
+    - packages
 
 - name: Remove microshift repo
   become: true
@@ -70,7 +100,7 @@
       - firefox
       - google-chrome-stable
     state: absent
-  when: use_flatpak_browsers
+  when: kah_env_use_flatpak_browsers
 
 - name: Install packages
   become: true
@@ -116,7 +146,6 @@
       - rclone
       - ripgrep
       - syncthing
-      - tailscale
       - task
       - tig
       - tlp
@@ -128,12 +157,8 @@
       - yamllint
       - yubikey-manager
     state: present
-
-- name: Install VirtualBox
-  become: true
-  ansible.builtin.dnf:
-    name: VirtualBox-7.0
-  when: install_virtualbox
+  tags:
+    - packages
 
 - name: Add flathub
   become: true
@@ -141,6 +166,8 @@
     name: flathub
     state: present
     flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+  tags:
+    - flatpaks
 
 - name: Install flatpaks
   become: true
@@ -151,9 +178,10 @@
       - com.spotify.Client
       - com.valvesoftware.Steam
       - net.cozic.joplin_desktop
-      - org.mozilla.Thunderbird
       - org.videolan.VLC
       - us.zoom.Zoom
+  tags:
+    - flatpaks
 
 - name: Install browsers via flatpak
   become: true
@@ -162,14 +190,16 @@
       - com.google.Chrome
       - org.chromium.Chromium
       - org.mozilla.firefox
-  when: use_flatpak_browsers
+  when: kah_env_use_flatpak_browsers
+  tags:
+    - flatpaks
 
 - name: Enable automatic dnf updates
   become: true
   ansible.builtin.systemd:
     name: dnf-automatic-install
     enabled: true
-  when: use_dnf_auto
+  when: kah_env_use_dnf_auto
 
 - name: Start docker service
   become: true
@@ -186,18 +216,24 @@
       - docker
       - libvirt
     append: true
+  tags:
+    - user
 
 - name: Create autostart directory
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.config/autostart"
     state: directory
+  tags:
+    - user
 
 - name: Set yakuake to autostart
   ansible.builtin.file:
     src: /usr/share/applications/org.kde.yakuake.desktop
     dest: "{{ ansible_user_dir }}/.config/autostart/org.kde.yakuake.desktop"
     state: link
-  when: use_yakuake
+  when: kah_env_use_yakuake
+  tags:
+    - user
 
 - name: Download homebrew install script
   become: true
@@ -205,13 +241,26 @@
     url: https://raw.githubusercontent.com/Homebrew/install/3e7999a7fb0e8f38248d61d081893a628d7b6885/install.sh
     dest: /opt/install-homebrew.sh
     checksum: sha256:41d5eb515a76b43e192259fde18e6cd683ea8b6a3d7873bcfc5065ab5b12235c
-  when: use_brew
+  when: kah_env_use_brew
+  tags:
+    - brew
 
 - name: Run homebrew installer
   ansible.builtin.command: bash -c 'NONINTERACTIVE=1 bash /opt/install-homebrew.sh'
   args:
     creates: /home/linuxbrew/.linuxbrew/bin/brew
-  when: use_brew
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Setup homebrew taps
+  community.general.homebrew_tap:
+    name:
+      - aquasecurity/trivy
+      - quarkusio/tap
+  when: kah_env_use_brew
+  tags:
+    - brew
 
 - name: Install homebrew packages
   community.general.homebrew:
@@ -237,4 +286,6 @@
       - stern
       - vale
       - yq
-  when: use_brew
+  when: kah_env_use_brew
+  tags:
+    - brew
