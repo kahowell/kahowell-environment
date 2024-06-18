@@ -14,7 +14,7 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
+      "matchFileNames": ["versions.yaml"],
       "automerge": true,
       "ignoreTests": true
     }
