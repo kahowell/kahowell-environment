@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-bootc:41
+FROM quay.io/fedora/fedora-bootc:40
 
 ARG ROLE_NAME=kahowell-environment
 ARG CHEZMOI_REPO=kahowell
