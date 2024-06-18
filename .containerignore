@@ -1,2 +1,6 @@
 .git
 Containerfile
+Containerfile.update
+Makefile
+bootc-image-builder.sh
+config.toml

@@ -145,6 +145,7 @@
       - python3-netaddr
       - rclone
       - ripgrep
+      - rustup
       - syncthing
       - task
       - tig
@@ -235,25 +236,94 @@
   tags:
     - user
 
-- name: Download homebrew install script
+- name: Create linuxbrew system user
   become: true
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/Homebrew/install/3e7999a7fb0e8f38248d61d081893a628d7b6885/install.sh
-    dest: /opt/install-homebrew.sh
-    checksum: sha256:41d5eb515a76b43e192259fde18e6cd683ea8b6a3d7873bcfc5065ab5b12235c
+  ansible.builtin.user:
+    name: linuxbrew
+    system: true
   when: kah_env_use_brew
   tags:
     - brew
 
-- name: Run homebrew installer
-  ansible.builtin.command: bash -c 'NONINTERACTIVE=1 bash /opt/install-homebrew.sh'
-  args:
-    creates: /home/linuxbrew/.linuxbrew/bin/brew
+- name: Create homebrew directory
+  become: true
+  ansible.builtin.file:
+    path: /opt/linuxbrew
+    state: directory
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Create homebrew config directory
+  become: true
+  ansible.builtin.file:
+    path: /etc/homebrew
+    state: directory
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+# workaround issue where brew gets confused in systems having /var/home symlinks
+- name: Create brew.env config file
+  become: true
+  ansible.builtin.copy:
+    content: |
+      HOMEBREW_REPOSITORY=/home/linuxbrew/.linuxbrew
+      HOMEBREW_CELLAR=/home/linuxbrew/.linuxbrew/Cellar
+    dest: /etc/homebrew/brew.env
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Create symlink to /opt/linuxbrew
+  become: true
+  ansible.builtin.file:
+    src: /opt/linuxbrew
+    dest: /home/linuxbrew/.linuxbrew
+    owner: linuxbrew
+    group: linuxbrew
+    state: link
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Create tmpfiles entry for linuxbrew symlink
+  become: true
+  ansible.builtin.copy:
+    content: 'L /home/linuxbrew/.linuxbrew - - - - /opt/linuxbrew'
+    dest: /etc/tmpfiles.d/linuxbrew.conf
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Download homebrew.tar.gz
+  become: true
+  ansible.builtin.get_url:
+    url: https://github.com/Homebrew/brew/archive/refs/tags/4.3.5.tar.gz
+    dest: /opt/homebrew.tar.gz
+    checksum: sha256:484b5ec9e568dcf991bf79fecdf77856b722af03f6fbdc6f8f9ef45d212c9b08
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Unpack homebrew
+  become: true
+  ansible.builtin.unarchive:
+    src: /opt/homebrew.tar.gz
+    dest: /opt/linuxbrew
+    owner: linuxbrew
+    group: linuxbrew
+    remote_src: true
+    creates: /opt/linuxbrew/bin/brew
+    extra_opts:
+      - --strip-components=1
   when: kah_env_use_brew
   tags:
     - brew
 
 - name: Setup homebrew taps
+  become: true
+  become_user: linuxbrew
   community.general.homebrew_tap:
     name:
       - aquasecurity/trivy
@@ -263,6 +333,8 @@
     - brew
 
 - name: Install homebrew packages
+  become: true
+  become_user: linuxbrew
   community.general.homebrew:
     name:
       - aquasecurity/trivy/trivy
@@ -280,7 +352,6 @@
       - openshift-cli
       - operator-sdk
       - quarkusio/tap/quarkus
-      - rustup-init
       - sops
       - starship
       - stern
@@ -289,3 +360,72 @@
   when: kah_env_use_brew
   tags:
     - brew
+
+- name: Download bundletool.jar
+  become: true
+  ansible.builtin.get_url:
+    url: https://github.com/google/bundletool/releases/download/{{ bundletool }}/bundletool-all-{{ bundletool }}.jar
+    dest: /usr/local/bin/bundletool.jar
+  tags:
+    - misc-software
+
+- name: Install bundletool wrapper
+  become: true
+  ansible.builtin.copy:
+    content: |
+      #!/bin/bash
+      java -jar ~/bin/bundletool.jar "$@"
+    dest: /usr/local/bin/bundletool
+    mode: '0755'
+  tags:
+    - misc-software
+
+- name: Download ollama
+  become: true
+  ansible.builtin.get_url:
+    url: https://github.com/ollama/ollama/releases/download/{{ ollama }}/ollama-linux-amd64
+    mode: '0755'
+    dest: /usr/local/bin/ollama
+  tags:
+    - misc-software
+
+- name: Create dir for quarto
+  become: true
+  ansible.builtin.file:
+    path: /opt/quarto
+    state: directory
+  tags:
+    - misc-software
+
+- name: Download quarto
+  become: true
+  ansible.builtin.unarchive:
+    src: https://github.com/quarto-dev/quarto-cli/releases/download/{{ quarto }}/quarto-{{ quarto | replace('v', '') }}-linux-amd64.tar.gz
+    dest: /opt/quarto
+    remote_src: true
+    creates: /opt/quarto/bin/quarto
+    extra_opts:
+      - --strip-components=1
+  tags:
+    - misc-software
+
+- name: Download crc
+  become: true
+  ansible.builtin.unarchive:
+    src: "https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/{{ crc | replace('v', '') }}/crc-linux-amd64.tar.xz"
+    dest: /usr/local/bin/
+    include: [ "crc-linux-{{ crc | replace('v', '') }}-amd64/crc" ]
+    remote_src: true
+    creates: /usr/local/bin/crc
+    extra_opts:
+      - --strip-components=1
+  tags:
+    - misc-software
+
+- name: Configure environment
+  become: true
+  ansible.builtin.copy:
+    src: kahowell-environment.sh
+    dest: /etc/profile.d/kahowell-environment.sh
+  tags:
+    - global-config

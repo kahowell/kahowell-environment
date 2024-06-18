@@ -1,3 +1,5 @@
 - hosts: localhost
   roles:
     - kahowell-environment
+  vars_files:
+    ./versions.yaml
