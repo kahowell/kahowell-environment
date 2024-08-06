@@ -264,6 +264,8 @@
   ansible.builtin.file:
     path: /home/linuxbrew/.linuxbrew
     state: directory
+    owner: linuxbrew
+    group: linuxbrew
   when: kah_env_use_brew
   tags:
     - brew
