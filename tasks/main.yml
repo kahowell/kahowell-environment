@@ -428,7 +428,6 @@
     src: https://github.com/quarto-dev/quarto-cli/releases/download/{{ quarto }}/quarto-{{ quarto | replace('v', '') }}-linux-amd64.tar.gz
     dest: /opt/quarto
     remote_src: true
-    creates: /opt/quarto/bin/quarto
     extra_opts:
       - --strip-components=1
   tags:
@@ -441,7 +440,6 @@
     dest: /usr/local/bin/
     include: [ "crc-linux-{{ crc | replace('v', '') }}-amd64/crc" ]
     remote_src: true
-    creates: /usr/local/bin/crc
     extra_opts:
       - --strip-components=1
   tags:
