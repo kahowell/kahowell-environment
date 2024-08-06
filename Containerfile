@@ -3,7 +3,6 @@ FROM quay.io/fedora/fedora-bootc:40
 RUN dnf update -y
 RUN mkdir -p /var/lib/alternatives
 RUN dnf install -y ansible
-RUN /home/linuxbrew/.linuxbrew/bin/brew update && /home/linuxbrew/.linuxbrew/bin/brew upgrade && /home/linuxbrew/.linuxbrew/bin/brew cleanup
 COPY . /etc/ansible/roles/kahowell-environment
 
 # system level stuff
