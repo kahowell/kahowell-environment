@@ -1,3 +1,4 @@
 output/iso/*.iso
 output/qcow2/*.qcow2
 output/*.json
+output/

@@ -1,22 +1,14 @@
 FROM quay.io/fedora/fedora-bootc:40
 
-ARG ROLE_NAME=kahowell-environment
-ARG CHEZMOI_REPO=kahowell
-ARG EMAIL=kevin@example.com
-
+RUN dnf update -y
 RUN mkdir -p /var/lib/alternatives
 RUN dnf install -y ansible
-COPY . /etc/ansible/roles/${ROLE_NAME}
+RUN /home/linuxbrew/.linuxbrew/bin/brew update && /home/linuxbrew/.linuxbrew/bin/brew upgrade && /home/linuxbrew/.linuxbrew/bin/brew cleanup
+COPY . /etc/ansible/roles/kahowell-environment
 
 # system level stuff
-RUN ansible-playbook /etc/ansible/roles/${ROLE_NAME}/provision.yml -t desktop
-RUN ansible-playbook /etc/ansible/roles/${ROLE_NAME}/provision.yml -t packages
-RUN ansible-playbook /etc/ansible/roles/${ROLE_NAME}/provision.yml -t flatpaks
-RUN ansible-playbook /etc/ansible/roles/${ROLE_NAME}/provision.yml -t misc-software
+RUN ansible-playbook /etc/ansible/roles/kahowell-environment/provision.yml -t desktop,packages,flatpaks,brew,misc-software,global-config
 
-# linuxbrew user to install brew packages
-RUN useradd -m -s /bin/false -r linuxbrew
-RUN ln -s /opt/linuxbrew /var/home/linuxbrew
-RUN echo "L /var/home/linuxbrew - - - - /opt/linuxbrew" > /etc/tmpfiles.d/linuxbrew.conf
-RUN ansible-playbook /etc/ansible/roles/${ROLE_NAME}/provision.yml -t brew
+ARG CHEZMOI_REPO=kahowell
+ARG EMAIL=kevin@example.com
 RUN EMAIL=${EMAIL} /home/linuxbrew/.linuxbrew/bin/chezmoi init --apply ${CHEZMOI_REPO} --destination /etc/skel

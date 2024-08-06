@@ -1,18 +1,13 @@
 FROM kahowell-environment:latest
 
-ARG ROLE_NAME=kahowell-environment
-ARG USER=kahowell
-ARG UID=1000
-
 COPY . /etc/ansible/roles/kahowell-environment
 
-# system level stuff
-USER 0
-RUN ansible-playbook /etc/ansible/roles/${ROLE_NAME}/provision.yml -t desktop,packages,flatpaks
+# general updates
 RUN dnf update -y
-RUN flatpak upgrade -y && flatpak uninstall --unused -y
+USER linuxbrew
+RUN /home/linuxbrew/.linuxbrew/bin/brew update && /home/linuxbrew/.linuxbrew/bin/brew upgrade && /home/linuxbrew/.linuxbrew/bin/brew cleanup
+USER root
+RUN /home/linuxbrew/.linuxbrew/bin/chezmoi update --destination /etc/skel
 
-# user-level stuff
-USER ${UID}
-RUN brew update && brew upgrade && brew cleanup
-RUN chezmoi update
+# system level stuff
+RUN ansible-playbook /etc/ansible/roles/kahowell-environment/provision.yml -t desktop -t packages -t flatpaks -t brew -t misc-software -t global-config

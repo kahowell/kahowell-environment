@@ -113,6 +113,8 @@
       - asciinema
       - bat
       - black
+      - buildah
+      - cabextract
       - clang
       - cmake
       - code
@@ -124,9 +126,13 @@
       - golang
       - gtk3-devel
       - hadolint
+      - httpie
+      - innoextract
       - java-17-openjdk-devel
       - jq
       - kernel-devel
+      - lutris
+      - mediawriter
       - meld
       - moby-engine
       - mono-devel
@@ -134,18 +140,26 @@
       - ninja-build
       - nmap
       - nodejs
+      - okteta
+      - okular
       - openssl
+      - osbuild-selinux
+      - pandoc
       - podman
       - podman-compose
       - poetry
       - pre-commit
       - procps-ng
       - protobuf-compiler
+      - protobuf-devel
+      - qrencode
       - python3-ansible-lint
       - python3-netaddr
       - rclone
+      - retroarch
       - ripgrep
       - rustup
+      - skopeo
       - syncthing
       - task
       - tig
@@ -419,6 +433,14 @@
     creates: /usr/local/bin/crc
     extra_opts:
       - --strip-components=1
+  tags:
+    - misc-software
+
+- name: Copy versions.yaml to /usr/local/bin
+  become: true
+  ansible.builtin.copy:
+    src: versions.yaml
+    dest: /usr/local/bin/versions.yaml
   tags:
     - misc-software
 
