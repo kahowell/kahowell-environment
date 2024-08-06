@@ -399,7 +399,7 @@
   ansible.builtin.copy:
     content: |
       #!/bin/bash
-      java -jar ~/bin/bundletool.jar "$@"
+      java -jar /usr/local/bin/bundletool.jar "$@"
     dest: /usr/local/bin/bundletool
     mode: '0755'
   tags:
