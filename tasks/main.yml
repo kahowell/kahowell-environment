@@ -414,6 +414,14 @@
   tags:
     - misc-software
 
+- name: Create ollama system user
+  become: true
+  ansible.builtin.user:
+    name: ollama
+    system: true
+  tags:
+    - misc-software
+
 - name: Set up ollama systemd unit
   become: true
   ansible.builtin.copy:
@@ -429,6 +437,7 @@
   ansible.builtin.systemd:
     name: ollama
     enabled: true
+    state: started
   tags:
     - misc-software
 
