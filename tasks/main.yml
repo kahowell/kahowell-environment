@@ -414,6 +414,24 @@
   tags:
     - misc-software
 
+- name: Set up ollama systemd unit
+  become: true
+  ansible.builtin.copy:
+    src: ollama.service
+    dest: /etc/systemd/system/ollama.service
+  tags:
+    - misc-software
+  notify:
+    systemd-reload
+
+- name: Start/enable ollama
+  become: true
+  ansible.builtin.systemd:
+    name: ollama
+    enabled: true
+  tags:
+    - misc-software
+
 - name: Create dir for quarto
   become: true
   ansible.builtin.file:
