@@ -259,12 +259,21 @@
   tags:
     - brew
 
-- name: Create homebrew directory
+- name: Create homebrew home directory
+  become: true
+  ansible.builtin.file:
+    path: /home/linuxbrew/.linuxbrew
+    state: directory
+  when: kah_env_use_brew
+  tags:
+    - brew
+
+- name: Create homebrew /opt directory
   become: true
   ansible.builtin.file:
     path: /opt/linuxbrew
     state: directory
-  when: kah_env_use_brew
+  when: (kah_env_use_brew and '/home' is link)
   tags:
     - brew
 
@@ -273,7 +282,7 @@
   ansible.builtin.file:
     path: /etc/homebrew
     state: directory
-  when: kah_env_use_brew
+  when: (kah_env_use_brew and '/home' is link)
   tags:
     - brew
 
@@ -285,11 +294,11 @@
       HOMEBREW_REPOSITORY=/home/linuxbrew/.linuxbrew
       HOMEBREW_CELLAR=/home/linuxbrew/.linuxbrew/Cellar
     dest: /etc/homebrew/brew.env
-  when: kah_env_use_brew
+  when: (kah_env_use_brew and '/home' is link)
   tags:
     - brew
 
-- name: Create symlink to /opt/linuxbrew
+- name: Create symlink to brew directory
   become: true
   ansible.builtin.file:
     src: /opt/linuxbrew
@@ -297,7 +306,7 @@
     owner: linuxbrew
     group: linuxbrew
     state: link
-  when: kah_env_use_brew
+  when: (kah_env_use_brew and '/home' is link)
   tags:
     - brew
 
@@ -306,7 +315,7 @@
   ansible.builtin.copy:
     content: 'L /home/linuxbrew/.linuxbrew - - - - /opt/linuxbrew'
     dest: /etc/tmpfiles.d/linuxbrew.conf
-  when: kah_env_use_brew
+  when: (kah_env_use_brew and '/home' is link)
   tags:
     - brew
 
@@ -324,11 +333,11 @@
   become: true
   ansible.builtin.unarchive:
     src: /opt/homebrew.tar.gz
-    dest: /opt/linuxbrew
+    dest: /home/linuxbrew/.linuxbrew
     owner: linuxbrew
     group: linuxbrew
     remote_src: true
-    creates: /opt/linuxbrew/bin/brew
+    creates: /home/linuxbrew/.linuxbrew/bin/brew
     extra_opts:
       - --strip-components=1
   when: kah_env_use_brew
