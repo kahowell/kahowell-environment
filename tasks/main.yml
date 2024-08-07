@@ -152,9 +152,9 @@
       - procps-ng
       - protobuf-compiler
       - protobuf-devel
-      - qrencode
       - python3-ansible-lint
       - python3-netaddr
+      - qrencode
       - rclone
       - retroarch
       - ripgrep
