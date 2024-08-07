@@ -145,6 +145,7 @@
       - openssl
       - osbuild-selinux
       - pandoc
+      - pipx
       - podman
       - podman-compose
       - poetry
