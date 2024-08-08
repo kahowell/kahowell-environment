@@ -124,6 +124,7 @@
       - dotnet
       - git
       - golang
+      - grpcurl
       - gtk3-devel
       - hadolint
       - httpie
