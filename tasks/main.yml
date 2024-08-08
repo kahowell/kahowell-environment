@@ -143,6 +143,7 @@
       - okteta
       - okular
       - openssl
+      - opentofu
       - osbuild-selinux
       - pandoc
       - pipx
