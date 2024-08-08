@@ -494,12 +494,14 @@
   become: true
   community.general.pipx:
     name: "{{ item }}"
+    install_deps: true
   environment:
     PIPX_HOME: /opt/pipx
     PIPX_BIN_DIR: /usr/local/bin
     PIPX_MAN_DIR: /usr/local/share/man
   with_items:
     - crc-bonfire
+    - mkdocs-techdocs-core
   tags:
     - misc-software
     - python
