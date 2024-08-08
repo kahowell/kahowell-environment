@@ -358,6 +358,7 @@
     name:
       - aquasecurity/trivy
       - quarkusio/tap
+      - get-woke/tap
   when: kah_env_use_brew
   tags:
     - brew
@@ -372,6 +373,7 @@
       - chezmoi
       - dive
       - geckodriver
+      - get-woke/tap/woke
       - helm
       - k3d
       - k9s
