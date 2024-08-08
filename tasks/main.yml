@@ -140,6 +140,7 @@
       - ninja-build
       - nmap
       - nodejs
+      - nodejs-npm
       - okteta
       - okular
       - openssl
@@ -374,7 +375,6 @@
       - k9s
       - kind
       - kube-linter
-      - markdownlint-cli2
       - minikube
       - openshift-cli
       - operator-sdk
@@ -503,3 +503,14 @@
   tags:
     - misc-software
     - python
+
+- name: Install nodejs tools
+  become: true
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+  with_items:
+    - markdownlint-cli2
+  tags:
+    - misc-software
+    - nodejs
