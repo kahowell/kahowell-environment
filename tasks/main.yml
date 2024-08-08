@@ -123,6 +123,7 @@
       - docker-compose
       - dotnet
       - git
+      - gitleaks
       - golang
       - grpcurl
       - gtk3-devel
