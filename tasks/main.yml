@@ -502,6 +502,7 @@
   with_items:
     - crc-bonfire
     - mkdocs-techdocs-core
+    - mitmproxy
   tags:
     - misc-software
     - python
