@@ -245,27 +245,12 @@
 - name: Add user to groups
   become: true
   ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ lookup('ansible.builtin.env', 'SUDO_USER', default=ansible_user_id) }}"
     groups:
       - docker
       - libvirt
     append: true
-  tags:
-    - user
-
-- name: Create autostart directory
-  ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/autostart"
-    state: directory
-  tags:
-    - user
-
-- name: Set yakuake to autostart
-  ansible.builtin.file:
-    src: /usr/share/applications/org.kde.yakuake.desktop
-    dest: "{{ ansible_user_dir }}/.config/autostart/org.kde.yakuake.desktop"
-    state: link
-  when: kah_env_use_yakuake
+  when: lookup('ansible.builtin.env', 'SUDO_USER', default=ansible_user_id) != 'root'
   tags:
     - user
 
