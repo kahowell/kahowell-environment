@@ -106,76 +106,90 @@
   become: true
   ansible.builtin.dnf:
     name:
-      - '@Development Tools'
+      # general tools
       - android-tools
-      - ansible
-      - ansible-lint
-      - asciinema
-      - bat
-      - black
-      - buildah
       - cabextract
+      - dnf-automatic
+      - innoextract
+      - mediawriter
+      - pandoc
+      - syncthing
+      - tlp
+      - virt-manager
+      - wireguard-tools
+      - yubikey-manager
+      # general dev tools
+      - '@Development Tools'
       - clang
       - cmake
       - code
       - direnv
-      - dnf-automatic
-      - docker-compose
-      - dotnet
       - git
       - gitleaks
-      - golang
       - grpcurl
       - gtk3-devel
-      - hadolint
       - httpie
-      - innoextract
-      - java-17-openjdk-devel
       - jq
       - kernel-devel
-      - lutris
-      - mediawriter
       - meld
-      - moby-engine
-      - mono-devel
-      - ncdu
       - ninja-build
       - nmap
-      - nodejs
-      - nodejs-npm
-      - okteta
-      - okular
       - openssl
-      - opentofu
-      - osbuild-selinux
-      - pandoc
-      - pipx
-      - podman
-      - podman-compose
-      - poetry
       - pre-commit
-      - procps-ng
       - protobuf-compiler
       - protobuf-devel
-      - python3-ansible-lint
-      - python3-netaddr
+      - yamllint
+      # devops/automation tools
+      - ansible
+      - ansible-lint
+      - opentofu
+      # cli tools
+      - asciinema
+      - bat
+      - ncdu
       - qrencode
       - rclone
-      - retroarch
       - ripgrep
-      - rustup
-      - skopeo
-      - syncthing
       - task
       - tig
-      - tlp
       - vim
-      - virt-manager
-      - wireguard-tools
       - wl-clipboard
+      # python tools
+      - black
+      - pipx
+      - poetry
+      - python3-ansible-lint
+      - python3-netaddr
+      # container tools
+      - buildah
+      - docker-compose
+      - hadolint
+      - moby-engine
+      - osbuild-selinux
+      - podman
+      - podman-compose
+      - skopeo
+      # dotnet tools
+      - dotnet
+      - mono-devel
+      # golang tools
+      - golang
+      # java tools
+      - java-17-openjdk-devel
+      # fun stuff
+      - lutris
+      - retroarch
+      # node js tools
+      - nodejs
+      - nodejs-npm
+      # kde-related tools
+      - okteta
+      - okular
       - yakuake
-      - yamllint
-      - yubikey-manager
+      # linuxbrew deps
+      - procps-ng
+      # rust tools
+      - rustup
     state: present
   tags:
     - packages
@@ -368,12 +382,11 @@
   become_user: linuxbrew
   community.general.homebrew:
     name:
+      # k8s tools
       - aquasecurity/trivy/trivy
       - argocd
       - chezmoi
       - dive
-      - geckodriver
-      - get-woke/tap/woke
       - helm
       - k3d
       - k9s
@@ -382,12 +395,16 @@
       - minikube
       - openshift-cli
       - operator-sdk
-      - quarkusio/tap/quarkus
+      - stern
+      # general dev tools
+      - geckodriver
+      - get-woke/tap/woke
       - sops
       - starship
-      - stern
       - vale
       - yq
+      # java dev tools
+      - quarkusio/tap/quarkus
   when: kah_env_use_brew
   tags:
     - brew
