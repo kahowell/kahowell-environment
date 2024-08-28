@@ -370,6 +370,7 @@
       # k8s tools
       - aquasecurity/trivy/trivy
       - argocd
+      - atuin
       - chezmoi
       - dive
       - helm
