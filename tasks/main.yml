@@ -388,6 +388,7 @@
       - get-woke/tap/woke
       - sops
       - starship
+      - topgrade
       - vale
       - yq
       # java dev tools
