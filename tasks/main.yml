@@ -370,7 +370,6 @@
       # k8s tools
       - aquasecurity/trivy/trivy
       - argocd
-      - atuin
       - bash-preexec
       - chezmoi
       - dive
@@ -384,6 +383,7 @@
       - operator-sdk
       - stern
       # general dev tools
+      - atuin
       - geckodriver
       - get-woke/tap/woke
       - sops
