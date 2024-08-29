@@ -371,6 +371,7 @@
       - aquasecurity/trivy/trivy
       - argocd
       - atuin
+      - bash-preexec
       - chezmoi
       - dive
       - helm
