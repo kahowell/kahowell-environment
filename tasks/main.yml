@@ -419,7 +419,7 @@
   ansible.builtin.unarchive:
     src: https://github.com/ollama/ollama/releases/download/{{ ollama }}/ollama-linux-amd64.tgz
     mode: '0755'
-    dest: /opt/ollama
+    dest: /usr/local
     remote_src: true
     extra_opts:
       - --strip-components=1
