@@ -189,6 +189,7 @@
       - skopeo
       # dotnet tools
       - dotnet
+      - dotnet-sdk-8.0
       - mono-devel
       # golang tools
       - golang
