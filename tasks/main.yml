@@ -515,6 +515,7 @@
     - crc-bonfire
     - mkdocs-techdocs-core
     - mitmproxy
+    - rich-cli
   tags:
     - misc-software
     - python
