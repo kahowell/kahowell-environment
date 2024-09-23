@@ -386,6 +386,7 @@
       - atuin
       - geckodriver
       - get-woke/tap/woke
+      - qsv
       - sops
       - starship
       - topgrade
