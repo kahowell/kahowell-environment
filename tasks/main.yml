@@ -125,6 +125,7 @@
       - code
       - direnv
       - git
+      - git-filter-repo
       - gitleaks
       - grpcurl
       - gtk3-devel
