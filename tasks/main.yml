@@ -232,7 +232,7 @@
 - name: Enable automatic dnf updates
   become: true
   ansible.builtin.systemd:
-    name: dnf-automatic-install
+    name: dnf-automatic.timer
     enabled: true
   when: kah_env_use_dnf_auto
 
