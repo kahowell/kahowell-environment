@@ -81,18 +81,6 @@
   tags:
     - packages
 
-- name: Remove microshift repo
-  become: true
-  community.general.copr:
-    name: '@redhat-et/microshift'
-    state: absent
-
-- name: Remove microshift RPM
-  become: true
-  ansible.builtin.dnf:
-    name: microshift
-    state: absent
-
 - name: Remove browser RPMs
   become: true
   ansible.builtin.dnf:
