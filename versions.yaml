@@ -1,5 +1,5 @@
 # renovate: datasource=github-releases depName=google/bundletool
-bundletool: "1.17.2"
+bundletool: "1.18.0"
 # renovate: datasource=github-releases depName=crc-org/crc
 crc: "v2.45.0"
 # renovate: datasource=github-releases depName=ollama/ollama
