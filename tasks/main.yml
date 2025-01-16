@@ -406,37 +406,6 @@
   tags:
     - misc-software
 
-- name: Stop/disable ollama
-  become: true
-  ansible.builtin.systemd:
-    name: ollama
-    enabled: false
-    state: stopped
-  tags:
-    - misc-software
-
-- name: Remove ollama
-  become: true
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - /usr/local/bin/ollama
-    - /usr/local/lib/ollama
-    - /etc/systemd/system/ollama.service
-  tags:
-    - misc-software
-  notify:
-    systemd-reload
-
-- name: Remove ollama system user
-  become: true
-  ansible.builtin.user:
-    name: ollama
-    state: absent
-  tags:
-    - misc-software
-
 - name: Create dir for quarto
   become: true
   ansible.builtin.file:
