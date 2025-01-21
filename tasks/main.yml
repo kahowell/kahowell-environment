@@ -273,6 +273,18 @@
   tags:
     - brew
 
+- name: Ensure permissions on homebrew home directory
+  become: true
+  ansible.builtin.file:
+    path: /home/linuxbrew/
+    state: directory
+    owner: linuxbrew
+    group: linuxbrew
+    mode: '0775'
+  when: kah_env_use_brew
+  tags:
+    - brew
+
 - name: Create homebrew home directory
   become: true
   ansible.builtin.file:
@@ -280,6 +292,7 @@
     state: directory
     owner: linuxbrew
     group: linuxbrew
+    mode: '0775'
   when: kah_env_use_brew
   tags:
     - brew
