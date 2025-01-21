@@ -90,6 +90,26 @@
     state: absent
   when: kah_env_use_flatpak_browsers
 
+- name: Add Slack RPM key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://slack.com/gpg/slack_pubkey_20240822.gpg
+    state: present
+  tags:
+    - packages
+
+- name: Add Slack yum repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: slack
+    description: slack
+    baseurl: https://packagecloud.io/slacktechnologies/slack/fedora/21/x86_64
+    gpgcheck: true
+    gpgkey: https://slack.com/gpg/slack_pubkey_20240822.gpg
+    file: slack
+  tags:
+    - packages
+
 - name: Install packages
   become: true
   ansible.builtin.dnf:
@@ -127,6 +147,7 @@
       - pre-commit
       - protobuf-compiler
       - protobuf-devel
+      - slack
       - yamllint
       # devops/automation tools
       - ansible
