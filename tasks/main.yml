@@ -122,6 +122,7 @@
       - innoextract
       - mediawriter
       - pandoc
+      - slack
       - syncthing
       - tlp
       - virt-manager
@@ -148,7 +149,6 @@
       - pre-commit
       - protobuf-compiler
       - protobuf-devel
-      - slack
       - yamllint
       # devops/automation tools
       - ansible
