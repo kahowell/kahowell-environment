@@ -6,7 +6,7 @@ Ansible role to manage my laptop setup. Feel free to reference or re-use (at you
 You can use this lazilly by installing in e.g. `~/.ansible/roles/kahowell-environment` and then running:
 
 ```
-ansible -K localhost -m include_role -a name=kahowell-environment
+ansible-playbook -K ~/.ansible/roles/kahowell-environment/provision.yml
 ```
 
 Requirements
