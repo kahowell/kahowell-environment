@@ -150,6 +150,7 @@
       - pre-commit
       - protobuf-compiler
       - protobuf-devel
+      - texlive-latex-recommended
       - yamllint
       # devops/automation tools
       - ansible
