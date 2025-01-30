@@ -420,6 +420,8 @@
       - yq
       # java dev tools
       - quarkusio/tap/quarkus
+      # golang dev tools
+      - golangci-lint
   when: kah_env_use_brew
   tags:
     - brew
