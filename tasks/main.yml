@@ -151,6 +151,7 @@
       - protobuf-compiler
       - protobuf-devel
       - texlive-latex-recommended
+      - texlive-parskip
       - yamllint
       # devops/automation tools
       - ansible
