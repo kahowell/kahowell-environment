@@ -172,6 +172,7 @@
       - black
       - pipx
       - poetry
+      - python-devel
       - python3-ansible-lint
       - python3-netaddr
       # container tools
