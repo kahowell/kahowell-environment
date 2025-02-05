@@ -181,6 +181,7 @@
       - hadolint
       - moby-engine
       - osbuild-selinux
+      - podlet
       - podman
       - podman-compose
       - skopeo
