@@ -408,6 +408,7 @@
       - k9s
       - kind
       - kube-linter
+      - kubelogin
       - minikube
       - openshift-cli
       - operator-sdk
