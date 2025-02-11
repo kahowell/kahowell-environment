@@ -409,6 +409,7 @@
       - kind
       - kube-linter
       - kubelogin
+      - kustomize
       - minikube
       - openshift-cli
       - operator-sdk
