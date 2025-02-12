@@ -388,6 +388,7 @@
       - aquasecurity/trivy
       - quarkusio/tap
       - get-woke/tap
+      - telepresenceio/telepresence
   when: kah_env_use_brew
   tags:
     - brew
@@ -414,6 +415,7 @@
       - openshift-cli
       - operator-sdk
       - stern
+      - telepresence-oss
       # general dev tools
       - atuin
       - geckodriver
