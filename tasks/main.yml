@@ -227,6 +227,7 @@
       - com.discordapp.Discord
       - com.spotify.Client
       - com.valvesoftware.Steam
+      - io.kinvolk.Headlamp
       - io.podman_desktop.PodmanDesktop
       - net.cozic.joplin_desktop
       - org.videolan.VLC
