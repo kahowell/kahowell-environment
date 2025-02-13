@@ -387,8 +387,9 @@
   community.general.homebrew_tap:
     name:
       - aquasecurity/trivy
-      - quarkusio/tap
       - get-woke/tap
+      - metalbear-co/mirrord
+      - quarkusio/tap
       - telepresenceio/telepresence
   when: kah_env_use_brew
   tags:
@@ -413,6 +414,7 @@
       - kubelogin
       - kustomize
       - minikube
+      - mirrord
       - openshift-cli
       - operator-sdk
       - stern
