@@ -167,6 +167,7 @@
       - task
       - tig
       - vim
+      - vym
       - wl-clipboard
       # python tools
       - black
