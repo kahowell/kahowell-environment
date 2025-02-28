@@ -120,6 +120,7 @@
       - chromium
       - dnf-automatic
       - innoextract
+      - jupyterlab
       - mediawriter
       - pandoc
       - slack
