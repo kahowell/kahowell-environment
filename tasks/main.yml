@@ -124,6 +124,7 @@
       - jupyterlab
       - mediawriter
       - pandoc
+      - rpi-imager
       - slack
       - syncthing
       - tlp
