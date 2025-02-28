@@ -118,6 +118,7 @@
       - android-tools
       - cabextract
       - chromium
+      - coreos-installer
       - dnf-automatic
       - innoextract
       - jupyterlab
