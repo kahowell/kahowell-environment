@@ -1,5 +1,5 @@
 # renovate: datasource=github-releases depName=google/bundletool
-bundletool: "1.18.0"
+bundletool: "1.18.1"
 # renovate: datasource=github-releases depName=crc-org/crc
 crc: "v2.47.0"
 # renovate: datasource=github-releases depName=quarto-dev/quarto-cli
