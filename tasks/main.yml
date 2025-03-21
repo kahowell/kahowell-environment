@@ -520,7 +520,6 @@
     PIPX_BIN_DIR: /usr/local/bin
     PIPX_MAN_DIR: /usr/local/share/man
   with_items:
-    - crc-bonfire
     - mkdocs-techdocs-core
     - mitmproxy
     - rich-cli
