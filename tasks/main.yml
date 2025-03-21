@@ -137,6 +137,7 @@
       - cmake
       - code
       - direnv
+      - gh
       - git
       - git-filter-repo
       - gitleaks
