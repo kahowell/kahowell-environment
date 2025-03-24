@@ -419,6 +419,7 @@
       - kube-linter
       - kubelogin
       - kustomize
+      - kwok
       - minikube
       - mirrord
       - openshift-cli
