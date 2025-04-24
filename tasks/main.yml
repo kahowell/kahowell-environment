@@ -422,8 +422,10 @@
       - kwok
       - minikube
       - mirrord
+      - ocm
       - openshift-cli
       - operator-sdk
+      - rosa-cli
       - stern
       - telepresence-oss
       # general dev tools
