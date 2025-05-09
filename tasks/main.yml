@@ -132,7 +132,7 @@
       - wireguard-tools
       - yubikey-manager
       # general dev tools
-      - '@Development Tools'
+      - '@development-tools'
       - clang
       - cmake
       - code
