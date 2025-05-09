@@ -574,3 +574,22 @@
   when: kah_env_use_cuda
   tags:
     - cuda
+
+- name: Generate CDI specification file
+  become: true
+  ansible.builtin.command: nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+  args:
+    creates: /etc/cdi/nvidia.yaml
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Allow rootless containers to use cuda
+  become: true
+  ansible.posix.seboolean:
+    name: container_use_devices
+    state: true
+    persistent: true
+  when: kah_env_use_cuda
+  tags:
+    - cuda
