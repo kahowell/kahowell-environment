@@ -110,6 +110,14 @@
   tags:
     - packages
 
+- name: Install development tools group
+  become: true
+  ansible.builtin.dnf:
+    name: '@Development Tools'
+    state: present
+  tags:
+    - packages
+
 - name: Install packages
   become: true
   ansible.builtin.dnf:
@@ -132,7 +140,6 @@
       - wireguard-tools
       - yubikey-manager
       # general dev tools
-      - '@Development Tools'
       - clang
       - cmake
       - code
