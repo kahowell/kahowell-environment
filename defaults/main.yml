@@ -7,3 +7,4 @@ kah_env_use_flatpak_browsers: false
 kah_env_use_dnf_auto: true
 kah_env_use_yakuake: false
 kah_env_use_brew: true
+kah_env_use_cuda: true

@@ -541,3 +541,36 @@
   tags:
     - misc-software
     - nodejs
+
+- name: Add NVIDIA repo
+  become: true
+  ansible.builtin.get_url:
+    url: "https://developer.download.nvidia.com/compute/cuda/repos/fedora{{ ansible_distribution_version }}/x86_64/cuda-fedora{{ ansible_distribution_version }}.repo"
+    dest: /etc/yum.repos.d/cuda.repo
+    mode: '0644'
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Add NVIDIA repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: "{{ lookup('ansible.builtin.file', '/etc/yum.repos.d/cuda.repo' ) | regex_search('gpgkey=([^\\s]+)', '\\1') | last }}"
+    state: present
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Install NVIDIA cuda packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - kernel-devel-matched
+      - kernel-headers
+      - nvidia-container-toolkit
+      - nvidia-driver-cuda
+      - kmod-nvidia-open-dkms
+    state: present
+  when: kah_env_use_cuda
+  tags:
+    - cuda
