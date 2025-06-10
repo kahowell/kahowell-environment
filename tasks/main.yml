@@ -428,6 +428,8 @@
       - rosa-cli
       - stern
       - telepresence-oss
+      # ai tools
+      - ollama
       # general dev tools
       - atuin
       - geckodriver
