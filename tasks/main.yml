@@ -435,6 +435,7 @@
       - geckodriver
       - get-woke/tap/woke
       - qsv
+      - mermaid-cli
       - sops
       - starship
       - topgrade
