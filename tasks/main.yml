@@ -435,7 +435,6 @@
       - geckodriver
       - get-woke/tap/woke
       - qsv
-      - mermaid-cli
       - sops
       - starship
       - topgrade
@@ -541,6 +540,7 @@
     global: true
   with_items:
     - markdownlint-cli2
+    - '@mermaid-js/mermaid-cli'
   tags:
     - misc-software
     - nodejs
