@@ -409,8 +409,6 @@
       # k8s tools
       - aquasecurity/trivy/trivy
       - argocd
-      - bash-preexec
-      - chezmoi
       - dive
       - helm
       - k3d
@@ -432,6 +430,8 @@
       - ollama
       # general dev tools
       - atuin
+      - bash-preexec
+      - chezmoi
       - geckodriver
       - get-woke/tap/woke
       - qsv
