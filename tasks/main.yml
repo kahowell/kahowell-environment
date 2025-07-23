@@ -415,6 +415,7 @@
       - k9s
       - kind
       - kube-linter
+      - kubebuilder
       - kubelogin
       - kustomize
       - kwok
