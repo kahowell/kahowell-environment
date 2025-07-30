@@ -53,6 +53,18 @@
   tags:
     - tailscale
 
+- name: Add VirtualBox repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: virtualbox
+    description: VirtualBox
+    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
+    gpgcheck: true
+    gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
+  when: kah_env_use_virtualbox
+  tags:
+    - virtualbox
+
 - name: Install tailscale
   become: true
   ansible.builtin.dnf:
@@ -78,6 +90,26 @@
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     file: vscode
+  tags:
+    - packages
+
+- name: Add gcloud repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    state: present
+  tags:
+    - packages
+
+- name: Add gcloud repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: google-cloud-cli
+    description: Google Cloud CLI
+    baseurl: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
+    gpgcheck: true
+    gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    file: google-cloud-sdk
   tags:
     - packages
 
@@ -141,11 +173,13 @@
       - git
       - git-filter-repo
       - gitleaks
+      - google-cloud-cli
       - grpcurl
       - gtk3-devel
       - httpie
       - jq
       - kernel-devel
+      - libxcrypt-compat
       - meld
       - ninja-build
       - nmap
