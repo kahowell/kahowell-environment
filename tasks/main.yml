@@ -462,6 +462,7 @@
       - stern
       - telepresence-oss
       # ai tools
+      - mcp-toolbox
       - ollama
       # general dev tools
       - atuin
