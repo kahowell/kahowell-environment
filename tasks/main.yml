@@ -620,6 +620,7 @@
   args:
     creates: /etc/cdi/nvidia.yaml
   when: kah_env_use_cuda
+  ignore_errors: true
   tags:
     - cuda
 
