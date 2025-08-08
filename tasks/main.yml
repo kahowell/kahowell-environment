@@ -481,8 +481,6 @@
       - quarkusio/tap/quarkus
       # golang dev tools
       - golangci-lint
-      # python dev tools
-      - pyoxidizer
   when: kah_env_use_brew
   tags:
     - brew
