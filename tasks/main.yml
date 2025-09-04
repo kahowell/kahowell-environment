@@ -471,6 +471,7 @@
       - geckodriver
       - get-woke/tap/woke
       - nvm
+      - pnpm
       - qsv
       - sops
       - starship
