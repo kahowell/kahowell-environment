@@ -152,6 +152,10 @@
       - chromium
       - coreos-installer
       - dnf-automatic
+      - eza
+      - fd-find
+      - fzf
+      - git-delta
       - innoextract
       - jupyterlab
       - mediawriter
