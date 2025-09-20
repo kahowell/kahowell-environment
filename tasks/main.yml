@@ -468,6 +468,7 @@
       # ai tools
       - mcp-toolbox
       - ollama
+      - specify
       # general dev tools
       - atuin
       - bash-preexec
