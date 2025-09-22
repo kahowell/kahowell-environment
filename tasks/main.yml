@@ -641,8 +641,7 @@
   become: true
   ansible.builtin.dnf:
     name:
-      # TODO fix
-      - nvidia-open
+      - nvidia-container-toolkit
     state: present
   when: kah_env_use_cuda
   tags:
