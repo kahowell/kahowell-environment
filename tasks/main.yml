@@ -152,7 +152,6 @@
       - chromium
       - coreos-installer
       - dnf-automatic
-      - eza
       - fd-find
       - fzf
       - git-delta
@@ -473,6 +472,7 @@
       - atuin
       - bash-preexec
       - chezmoi
+      - eza
       - geckodriver
       - get-woke/tap/woke
       - nvm
