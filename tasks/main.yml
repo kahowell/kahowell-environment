@@ -235,7 +235,7 @@
       # golang tools
       - golang
       # java tools
-      - java-17-openjdk-devel
+      - java-25-openjdk-devel
       # fun stuff
       - lutris
       - retroarch
