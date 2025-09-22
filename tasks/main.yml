@@ -24,9 +24,9 @@
   ansible.builtin.yum_repository:
     name: virtualbox
     description: VirtualBox
-    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
+    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/42/x86_64
     gpgcheck: true
-    gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
+    gpgkey: https://www.virtualbox.org/download/oracle_vbox_2016.asc
   when: kah_env_use_virtualbox
   tags:
     - virtualbox
