@@ -188,12 +188,12 @@
       - ninja-build
       - nmap
       - openssl
-      - pdflatex
       - pre-commit
       - protobuf-compiler
       - protobuf-devel
       - texlive-collection-latex
       - texlive-parskip
+      - texlive-scheme-basic
       - yamllint
       # devops/automation tools
       - ansible
