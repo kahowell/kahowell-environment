@@ -569,11 +569,11 @@
   loop: "{{ commands | dict2items }}"
   vars:
     commands:
-      - mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
-      - mitmproxy: uvx mitmproxy
-      - mitmweb: uvx --from=mitmproxy mitmweb
-      - rich-cli: uvx rich-cli
-      - ramalama: uvx ramalama
+      mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
+      mitmproxy: uvx mitmproxy
+      mitmweb: uvx --from=mitmproxy mitmweb
+      rich-cli: uvx rich-cli
+      ramalama: uvx ramalama
   tags:
     - misc-software
     - python
