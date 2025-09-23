@@ -560,16 +560,20 @@
 
 - name: Install python tools
   become: true
-  community.general.pipx:
-    name: "{{ item }}"
-    install_deps: true
-  environment:
-    PIPX_HOME: /opt/pipx
-    PIPX_BIN_DIR: /usr/local/bin
-    PIPX_MAN_DIR: /usr/local/share/man
+  ansible.builtin.copy:
+    dest: "/usr/local/bin/{{ item.split(':')[-1] if ':' in item else item }}"
+    content: |
+      #!/bin/bash
+      {% if ':' in item %}
+      uvx --from={{ item.split(':')[0] }} {{ item.split(':')[1] }} "$@"
+      {% else %}
+      uvx {{ item }} "$@"
+      {% endif %}
+    mode: '0755'
   with_items:
     - mkdocs-techdocs-core
     - mitmproxy
+    - mitmproxy:mitmweb
     - rich-cli
     - ramalama
   tags:
