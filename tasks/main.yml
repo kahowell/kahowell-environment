@@ -566,12 +566,14 @@
       #!/bin/sh
       {{ item.value }}
     mode: '0755'
-  with_items:
-    - mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
-    - mitmproxy: uvx mitmproxy
-    - mitmweb: uvx --from=mitmproxy mitmweb
-    - rich-cli: uvx rich-cli
-    - ramalama: uvx ramalama
+  loop: "{{ commands | dict2items }}"
+  vars:
+    commands:
+      - mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
+      - mitmproxy: uvx mitmproxy
+      - mitmweb: uvx --from=mitmproxy mitmweb
+      - rich-cli: uvx rich-cli
+      - ramalama: uvx ramalama
   tags:
     - misc-software
     - python
