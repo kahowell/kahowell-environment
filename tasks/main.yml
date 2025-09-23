@@ -561,21 +561,17 @@
 - name: Install python tools
   become: true
   ansible.builtin.copy:
-    dest: "/usr/local/bin/{{ item.split(':')[-1] if ':' in item else item }}"
+    dest: "/usr/local/bin/{{ item.key }}"
     content: |
-      #!/bin/bash
-      {% if ':' in item %}
-      uvx --from={{ item.split(':')[0] }} {{ item.split(':')[1] }} "$@"
-      {% else %}
-      uvx {{ item }} "$@"
-      {% endif %}
+      #!/bin/sh
+      {{ item.value }}
     mode: '0755'
   with_items:
-    - mkdocs-techdocs-core
-    - mitmproxy
-    - mitmproxy:mitmweb
-    - rich-cli
-    - ramalama
+    - mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
+    - mitmproxy: uvx mitmproxy
+    - mitmweb: uvx --from=mitmproxy mitmweb
+    - rich-cli: uvx rich-cli
+    - ramalama: uvx ramalama
   tags:
     - misc-software
     - python
