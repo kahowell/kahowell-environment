@@ -476,6 +476,7 @@
       - geckodriver
       - get-woke/tap/woke
       - nvm
+      - opencode
       - pnpm
       - qsv
       - sops
