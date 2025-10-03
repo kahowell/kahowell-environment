@@ -574,7 +574,7 @@
       mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
       mitmproxy: uvx mitmproxy
       mitmweb: uvx --from=mitmproxy mitmweb
-      openhands: uvx --from=openhands-ai openhands
+      openhands: uvx --python 3.12 --from=openhands-ai openhands
       rich-cli: uvx rich-cli
       ramalama: uvx ramalama
   tags:
