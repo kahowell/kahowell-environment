@@ -430,6 +430,7 @@
   community.general.homebrew_tap:
     name:
       - aquasecurity/trivy
+      - charmbracelet/tap
       - get-woke/tap
       - metalbear-co/mirrord
       - quarkusio/tap
@@ -465,8 +466,10 @@
       - stern
       - telepresence-oss
       # ai tools
+      - crush
       - mcp-toolbox
       - ollama
+      - opencode
       - specify
       # general dev tools
       - atuin
@@ -476,7 +479,6 @@
       - geckodriver
       - get-woke/tap/woke
       - nvm
-      - opencode
       - pnpm
       - qsv
       - sops
