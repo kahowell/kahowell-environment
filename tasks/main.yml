@@ -466,7 +466,6 @@
       - stern
       - telepresence-oss
       # ai tools
-      - crush
       - mcp-toolbox
       - ollama
       - opencode
@@ -575,6 +574,7 @@
       mkdocs: uvx --with=mkdocs-techdocs-core mkdocs
       mitmproxy: uvx mitmproxy
       mitmweb: uvx --from=mitmproxy mitmweb
+      openhands: uvx --from=openhands-ai openhands
       rich-cli: uvx rich-cli
       ramalama: uvx ramalama
   tags:
