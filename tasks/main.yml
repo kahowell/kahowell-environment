@@ -469,6 +469,7 @@
       - mcp-toolbox
       - ollama
       - opencode
+      - repomix
       - specify
       # general dev tools
       - atuin
