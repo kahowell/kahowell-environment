@@ -2,198 +2,73 @@
 - name: Gather facts
   ansible.builtin.gather_facts: {}
 
-- name: Install desktop environment
-  become: true
-  ansible.builtin.dnf:
-    name: '@kde-desktop-environment'
-  when: kah_env_use_kde
-  tags:
-    - desktop
+- name: Install homebrew
+  ansible.builtin.include_tasks: "install-brew.yaml"
+  when: ansible_pkg_mgr=="dnf"  # assumed to be ublue-based otherwise
 
-- name: Add VirtualBox repo key
-  become: true
-  ansible.builtin.rpm_key:
-    key: https://www.virtualbox.org/download/oracle_vbox.asc
-    state: present
-  when: kah_env_use_virtualbox
-  tags:
-    - virtualbox
+- name: Install RPMs
+  ansible.builtin.include_tasks: "install-rpms.yaml"
+  when: ansible_pkg_mgr=="dnf"  # assumed to be ublue-based otherwise
 
-- name: Add VirtualBox repo
-  become: true
-  ansible.builtin.yum_repository:
-    name: virtualbox
-    description: VirtualBox
-    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/42/x86_64
-    gpgcheck: true
-    gpgkey: https://www.virtualbox.org/download/oracle_vbox_2016.asc
-  when: kah_env_use_virtualbox
-  tags:
-    - virtualbox
+- name: Setup CUDA
+  ansible.builtin.include_tasks: "setup-cuda.yaml"
+  when: (ansible_pkg_mgr=="dnf" and kah_env_use_cuda)
 
-- name: Add tailscale repo key
-  become: true
-  ansible.builtin.rpm_key:
-    key: https://pkgs.tailscale.com/stable/fedora/repo.gpg
-    state: present
-  when: kah_env_use_tailscale
-  tags:
-    - tailscale
-
-- name: Add tailscale repo
-  become: true
-  ansible.builtin.yum_repository:
-    name: tailscale-stable
-    description: Tailscale stable
-    baseurl: https://pkgs.tailscale.com/stable/fedora/$basearch
-    gpgcheck: false
-    repo_gpgcheck: true
-    gpgkey: https://pkgs.tailscale.com/stable/fedora/repo.gpg
-  when: kah_env_use_tailscale
-  tags:
-    - tailscale
-
-- name: Add VirtualBox repo
-  become: true
-  ansible.builtin.yum_repository:
-    name: virtualbox
-    description: VirtualBox
-    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
-    gpgcheck: true
-    gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
-  when: kah_env_use_virtualbox
-  tags:
-    - virtualbox
-
-- name: Install tailscale
-  become: true
-  ansible.builtin.dnf:
-    name: tailscale
-  when: kah_env_use_tailscale
-  tags:
-    - tailscale
-
-- name: Add VS Code repo key
-  become: true
-  ansible.builtin.rpm_key:
-    key: https://packages.microsoft.com/keys/microsoft.asc
-    state: present
-  tags:
-    - packages
-
-- name: Add VS Code repo
-  become: true
-  ansible.builtin.yum_repository:
-    name: code
-    description: Visual Studio Code
-    baseurl: https://packages.microsoft.com/yumrepos/vscode
-    gpgcheck: true
-    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    file: vscode
-  tags:
-    - packages
-
-- name: Add gcloud repo key
-  become: true
-  ansible.builtin.rpm_key:
-    key: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-    state: present
-  tags:
-    - packages
-
-- name: Add gcloud repo
-  become: true
-  ansible.builtin.yum_repository:
-    name: google-cloud-cli
-    description: Google Cloud CLI
-    baseurl: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
-    gpgcheck: true
-    gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-    file: google-cloud-sdk
-  tags:
-    - packages
-
-- name: Remove browser RPMs
-  become: true
-  ansible.builtin.dnf:
+- name: Setup homebrew taps
+  community.general.homebrew_tap:
     name:
-      - firefox
-      - google-chrome-stable
-    state: absent
-  when: kah_env_use_flatpak_browsers
-
-- name: Add Slack RPM key
-  become: true
-  ansible.builtin.rpm_key:
-    key: https://slack.com/gpg/slack_pubkey_20240822.gpg
-    state: present
+      - aquasecurity/trivy
+      - get-woke/tap
+      - metalbear-co/mirrord
+      - quarkusio/tap
+      - telepresenceio/telepresence
   tags:
-    - packages
+    - brew
 
-- name: Add Slack yum repo
-  become: true
-  ansible.builtin.yum_repository:
-    name: slack
-    description: slack
-    baseurl: https://packagecloud.io/slacktechnologies/slack/fedora/21/x86_64
-    gpgcheck: true
-    gpgkey: https://slack.com/gpg/slack_pubkey_20240822.gpg
-    file: slack
-  tags:
-    - packages
-
-- name: Install packages
-  become: true
-  ansible.builtin.dnf:
+- name: Install homebrew casks
+  community.general.homebrew_cask:
     name:
       # general tools
-      - android-tools
-      - cabextract
-      - chromium
-      - coreos-installer
-      - dnf-automatic
-      - fd-find
+      - android-platform-tools
+      - claude-code
+  tags:
+    - brew
+
+- name: Install homebrew packages
+  community.general.homebrew:
+    name:
+      # general tools
+      - fd
       - fzf
       - git-delta
       - innoextract
-      - jupyterlab
-      - mediawriter
       - pandoc
-      - rpi-imager
-      - slack
       - syncthing
-      - tlp
-      - virt-manager
-      - wireguard-tools
-      - yubikey-manager
       # general dev tools
-      - '@development-tools'
-      - clang
-      - cmake
-      - code
+      - atuin
+      - bash-preexec
+      - chezmoi
       - direnv
+      - eza
+      - geckodriver
+      - get-woke/tap/woke
       - gh
-      - git
-      - git-filter-repo
       - gitleaks
-      - google-cloud-cli
       - grpcurl
-      - gtk3-devel
       - httpie
-      - jq
-      - kernel-devel
-      - libxcrypt-compat
-      - meld
-      - ninja-build
+      - markdownlint-cli2
+      - mermaid-cli
       - nmap
-      - openssl
+      - nvm
+      - pnpm
       - pre-commit
-      - protobuf-compiler
-      - protobuf-devel
-      - texlive-collection-latex
-      - texlive-parskip
-      - texlive-scheme-basic
+      - protobuf
+      - qsv
+      - sops
+      - starship
+      - vale
       - yamllint
+      - yq
       # devops/automation tools
       - ansible
       - ansible-lint
@@ -204,246 +79,26 @@
       - ncdu
       - qrencode
       - rclone
+      - rich-cli
       - ripgrep
       - task
       - tig
-      - vim
-      - vym
-      - wl-clipboard
       # python tools
       - black
-      - pipx
       - poetry
-      - python-devel
-      - python3-ansible-lint
-      - python3-netaddr
-      # container tools
-      - buildah
-      - docker-compose
-      - hadolint
-      - moby-engine
-      - osbuild-selinux
-      - podlet
-      - podman
-      - podman-compose
-      - skopeo
+      - uv
       # dotnet tools
       - dotnet
-      - dotnet-sdk-8.0
-      - mono-devel
       # golang tools
-      - golang
+      - go
+      - golangci-lint
       # java tools
-      - java-25-openjdk-devel
-      # fun stuff
-      - lutris
-      - retroarch
+      - openjdk
+      - quarkusio/tap/quarkus
       # node js tools
-      - nodejs
-      - nodejs-npm
-      # kde-related tools
-      - okteta
-      - okular
-      - yakuake
-      # linuxbrew deps
-      - procps-ng
+      - node
       # rust tools
       - rustup
-    state: present
-  tags:
-    - packages
-
-- name: Add flathub
-  become: true
-  community.general.flatpak_remote:
-    name: flathub
-    state: present
-    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
-  tags:
-    - flatpaks
-
-- name: Install flatpaks
-  become: true
-  community.general.flatpak:
-    name:
-      - ch.theologeek.Manuskript
-      - com.discordapp.Discord
-      - com.spotify.Client
-      - com.valvesoftware.Steam
-      - io.kinvolk.Headlamp
-      - io.podman_desktop.PodmanDesktop
-      - net.cozic.joplin_desktop
-      - org.videolan.VLC
-      - us.zoom.Zoom
-  tags:
-    - flatpaks
-
-- name: Install browsers via flatpak
-  become: true
-  community.general.flatpak:
-    name:
-      - com.google.Chrome
-      - org.chromium.Chromium
-      - org.mozilla.firefox
-  when: kah_env_use_flatpak_browsers
-  tags:
-    - flatpaks
-
-- name: Enable automatic dnf updates
-  become: true
-  ansible.builtin.systemd:
-    name: dnf-automatic.timer
-    enabled: true
-  when: kah_env_use_dnf_auto
-
-- name: Start docker service
-  become: true
-  ansible.builtin.systemd:
-    name: docker
-    enabled: true
-    state: started
-
-- name: Add user to groups
-  become: true
-  ansible.builtin.user:
-    name: "{{ lookup('ansible.builtin.env', 'SUDO_USER', default=ansible_user_id) }}"
-    groups:
-      - docker
-      - libvirt
-    append: true
-  when: lookup('ansible.builtin.env', 'SUDO_USER', default=ansible_user_id) != 'root'
-  tags:
-    - user
-
-- name: Create linuxbrew system user
-  become: true
-  ansible.builtin.user:
-    name: linuxbrew
-    system: true
-  when: kah_env_use_brew
-  tags:
-    - brew
-
-- name: Ensure permissions on homebrew home directory
-  become: true
-  ansible.builtin.file:
-    path: /home/linuxbrew/
-    state: directory
-    owner: linuxbrew
-    group: linuxbrew
-    mode: '0775'
-  when: kah_env_use_brew
-  tags:
-    - brew
-
-- name: Create homebrew home directory
-  become: true
-  ansible.builtin.file:
-    path: /home/linuxbrew/.linuxbrew
-    state: directory
-    owner: linuxbrew
-    group: linuxbrew
-    mode: '0775'
-  when: kah_env_use_brew
-  tags:
-    - brew
-
-- name: Create homebrew /opt directory
-  become: true
-  ansible.builtin.file:
-    path: /opt/linuxbrew
-    state: directory
-  when: (kah_env_use_brew and '/home' is link)
-  tags:
-    - brew
-
-- name: Create homebrew config directory
-  become: true
-  ansible.builtin.file:
-    path: /etc/homebrew
-    state: directory
-  when: (kah_env_use_brew and '/home' is link)
-  tags:
-    - brew
-
-# workaround issue where brew gets confused in systems having /var/home symlinks
-- name: Create brew.env config file
-  become: true
-  ansible.builtin.copy:
-    content: |
-      HOMEBREW_REPOSITORY=/home/linuxbrew/.linuxbrew
-      HOMEBREW_CELLAR=/home/linuxbrew/.linuxbrew/Cellar
-    dest: /etc/homebrew/brew.env
-  when: (kah_env_use_brew and '/home' is link)
-  tags:
-    - brew
-
-- name: Create symlink to brew directory
-  become: true
-  ansible.builtin.file:
-    src: /opt/linuxbrew
-    dest: /home/linuxbrew/.linuxbrew
-    owner: linuxbrew
-    group: linuxbrew
-    state: link
-  when: (kah_env_use_brew and '/home' is link)
-  tags:
-    - brew
-
-- name: Create tmpfiles entry for linuxbrew symlink
-  become: true
-  ansible.builtin.copy:
-    content: 'L /home/linuxbrew/.linuxbrew - - - - /opt/linuxbrew'
-    dest: /etc/tmpfiles.d/linuxbrew.conf
-  when: (kah_env_use_brew and '/home' is link)
-  tags:
-    - brew
-
-- name: Download homebrew.tar.gz
-  become: true
-  ansible.builtin.get_url:
-    url: https://github.com/Homebrew/brew/archive/refs/tags/4.3.5.tar.gz
-    dest: /opt/homebrew.tar.gz
-    checksum: sha256:484b5ec9e568dcf991bf79fecdf77856b722af03f6fbdc6f8f9ef45d212c9b08
-  when: kah_env_use_brew
-  tags:
-    - brew
-
-- name: Unpack homebrew
-  become: true
-  ansible.builtin.unarchive:
-    src: /opt/homebrew.tar.gz
-    dest: /home/linuxbrew/.linuxbrew
-    owner: linuxbrew
-    group: linuxbrew
-    remote_src: true
-    creates: /home/linuxbrew/.linuxbrew/bin/brew
-    extra_opts:
-      - --strip-components=1
-  when: kah_env_use_brew
-  tags:
-    - brew
-
-- name: Setup homebrew taps
-  become: true
-  become_user: linuxbrew
-  community.general.homebrew_tap:
-    name:
-      - aquasecurity/trivy
-      - charmbracelet/tap
-      - get-woke/tap
-      - metalbear-co/mirrord
-      - quarkusio/tap
-      - telepresenceio/telepresence
-  when: kah_env_use_brew
-  tags:
-    - brew
-
-- name: Install homebrew packages
-  become: true
-  become_user: linuxbrew
-  community.general.homebrew:
-    name:
       # k8s tools
       - aquasecurity/trivy/trivy
       - argocd
@@ -471,204 +126,46 @@
       - opencode
       - repomix
       - specify
-      # general dev tools
-      - atuin
-      - bash-preexec
-      - chezmoi
-      - eza
-      - geckodriver
-      - get-woke/tap/woke
-      - nvm
-      - pnpm
-      - qsv
-      - sops
-      - starship
-      - topgrade
-      - vale
-      - yq
-      # java dev tools
-      - quarkusio/tap/quarkus
-      # golang dev tools
-      - golangci-lint
-  when: kah_env_use_brew
   tags:
     - brew
 
-- name: Download bundletool.jar
-  become: true
-  ansible.builtin.get_url:
-    url: https://github.com/google/bundletool/releases/download/{{ bundletool }}/bundletool-all-{{ bundletool }}.jar
-    dest: /usr/local/bin/bundletool.jar
-  tags:
-    - misc-software
-
-- name: Install bundletool wrapper
-  become: true
-  ansible.builtin.copy:
-    content: |
-      #!/bin/bash
-      java -jar /usr/local/bin/bundletool.jar "$@"
-    dest: /usr/local/bin/bundletool
-    mode: '0755'
-  tags:
-    - misc-software
-
-- name: Create dir for quarto
-  become: true
-  ansible.builtin.file:
-    path: /opt/quarto
-    state: directory
-  tags:
-    - misc-software
-
-- name: Download quarto
-  become: true
-  ansible.builtin.unarchive:
-    src: https://github.com/quarto-dev/quarto-cli/releases/download/{{ quarto }}/quarto-{{ quarto | replace('v', '') }}-linux-amd64.tar.gz
-    dest: /opt/quarto
-    remote_src: true
-    extra_opts:
-      - --strip-components=1
-  tags:
-    - misc-software
-
-- name: Download crc
-  become: true
-  ansible.builtin.unarchive:
-    src: "https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/{{ crc | replace('v', '') }}/crc-linux-amd64.tar.xz"
-    dest: /usr/local/bin/
-    include:
-      - "crc-linux-{{ crc | replace('v', '') }}-amd64/crc"
-    remote_src: true
-    extra_opts:
-      - --strip-components=1
-  tags:
-    - misc-software
-
-- name: Copy versions.yaml to /usr/local/bin
-  become: true
-  ansible.builtin.copy:
-    src: versions.yaml
-    dest: /usr/local/bin/versions.yaml
-  tags:
-    - misc-software
-
-- name: Configure environment
-  become: true
-  ansible.builtin.copy:
-    src: kahowell-environment.sh
-    dest: /etc/profile.d/kahowell-environment.sh
-  tags:
-    - global-config
-
-- name: Install python tools
-  become: true
-  ansible.builtin.copy:
-    dest: "/usr/local/bin/{{ item.key }}"
-    content: |
-      #!/bin/sh
-      {{ item.value }}
-    mode: '0755'
-  loop: "{{ commands | dict2items }}"
-  vars:
-    commands:
-      mkdocs: uvx --with=mkdocs-techdocs-core mkdocs "$@"
-      mitmproxy: uvx mitmproxy "$@"
-      mitmweb: uvx --from=mitmproxy mitmweb "$@"
-      openhands: uvx --python 3.12 --from=openhands-ai openhands "$@"
-      rich-cli: uvx rich-cli "$@"
-      ramalama: uvx ramalama "$@"
-  tags:
-    - misc-software
-    - python
-
-- name: Install nodejs tools
-  become: true
-  community.general.npm:
-    name: "{{ item }}"
-    global: true
-  with_items:
-    - markdownlint-cli2
-    - '@mermaid-js/mermaid-cli'
-  tags:
-    - misc-software
-    - nodejs
-
-- name: Add NVIDIA repo
-  become: true
-  ansible.builtin.get_url:
-    url: "https://developer.download.nvidia.com/compute/cuda/repos/fedora{{ ansible_distribution_version }}/x86_64/cuda-fedora{{ ansible_distribution_version }}.repo"
-    dest: /etc/yum.repos.d/cuda.repo
-    mode: '0644'
-  when: kah_env_use_cuda
-  tags:
-    - cuda
-
-- name: Add NVIDIA repo key
-  become: true
-  ansible.builtin.rpm_key:
-    key: "{{ lookup('ansible.builtin.file', '/etc/yum.repos.d/cuda.repo' ) | regex_search('gpgkey=([^\\s]+)', '\\1') | last }}"
+- name: Add flathub
+  community.general.flatpak_remote:
+    name: flathub
     state: present
-  when: kah_env_use_cuda
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
   tags:
-    - cuda
+    - flatpak
 
-- name: Install NVIDIA cuda packages
-  become: true
-  ansible.builtin.dnf:
+- name: Install flatpak
+  community.general.flatpak:
     name:
-      - cuda-toolkit-13-0
-      - nvidia-open
-    state: present
-  when: kah_env_use_cuda
+      - com.discordapp.Discord
+      - com.google.Chrome
+      - com.slack.Slack
+      - com.spotify.Client
+      - com.visualstudio.code
+      - io.kinvolk.Headlamp
+      - io.podman_desktop.PodmanDesktop
+      - net.cozic.joplin_desktop
+      - org.chromium.Chromium
+      - org.gimp.GIMP
+      - org.gnome.meld
+      - org.inkscape.Inkscape
+      - org.kde.okteta
+      - org.mozilla.firefox
+      - org.raspberrypi.rpi-imager
+      - org.videolan.VLC
+      - us.zoom.Zoom
   tags:
-    - cuda
+    - flatpak
 
-- name: Add NVIDIA CTK repo
-  become: true
-  ansible.builtin.get_url:
-    url: https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
-    dest: /etc/yum.repos.d/nvidia-container-toolkit.repo
-    mode: '0644'
-  when: kah_env_use_cuda
-  tags:
-    - cuda
-
-- name: Add NVIDIA CTK repo key
-  become: true
-  ansible.builtin.rpm_key:
-    key: "{{ lookup('ansible.builtin.file', '/etc/yum.repos.d/nvidia-container-toolkit.repo' ) | regex_search('gpgkey=([^\\s]+)', '\\1') | last }}"
-    state: present
-  when: kah_env_use_cuda
-  tags:
-    - cuda
-
-- name: Install NVIDIA CTK packages
-  become: true
-  ansible.builtin.dnf:
-    name:
-      - nvidia-container-toolkit
-    state: present
-  when: kah_env_use_cuda
-  tags:
-    - cuda
-
-- name: Generate CDI specification file
-  become: true
-  ansible.builtin.command: nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+- name: Install various python-based tools
+  ansible.builtin.command: "uv tool install {{ item }}"
   args:
-    creates: /etc/cdi/nvidia.yaml
-  when: kah_env_use_cuda
-  ignore_errors: true
+    creates: "{{ ansible_user_dir }}/.local/share/uv/tools/{{ item }}"
+  with_items:
+    - mitmproxy
+    - openhands-ai
   tags:
-    - cuda
-
-- name: Allow rootless containers to use cuda
-  become: true
-  ansible.posix.seboolean:
-    name: container_use_devices
-    state: true
-    persistent: true
-  when: kah_env_use_cuda
-  tags:
-    - cuda
+    - python

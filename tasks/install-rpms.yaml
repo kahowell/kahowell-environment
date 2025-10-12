@@ -1,0 +1,148 @@
+- name: Install desktop environment
+  become: true
+  ansible.builtin.dnf:
+    name: '@kde-desktop-environment'
+  when: kah_env_use_kde
+  tags:
+    - desktop
+
+- name: Add VirtualBox repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://www.virtualbox.org/download/oracle_vbox.asc
+    state: present
+  when: kah_env_use_virtualbox
+  tags:
+    - virtualbox
+
+- name: Add VirtualBox repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: virtualbox
+    description: VirtualBox
+    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/42/x86_64
+    gpgcheck: true
+    gpgkey: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+  when: kah_env_use_virtualbox
+  tags:
+    - virtualbox
+
+- name: Add tailscale repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://pkgs.tailscale.com/stable/fedora/repo.gpg
+    state: present
+  when: kah_env_use_tailscale
+  tags:
+    - tailscale
+
+- name: Add tailscale repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: tailscale-stable
+    description: Tailscale stable
+    baseurl: https://pkgs.tailscale.com/stable/fedora/$basearch
+    gpgcheck: false
+    repo_gpgcheck: true
+    gpgkey: https://pkgs.tailscale.com/stable/fedora/repo.gpg
+  when: kah_env_use_tailscale
+  tags:
+    - tailscale
+
+- name: Add VirtualBox repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: virtualbox
+    description: VirtualBox
+    baseurl: http://download.virtualbox.org/virtualbox/rpm/fedora/36/$basearch
+    gpgcheck: true
+    gpgkey: https://www.virtualbox.org/download/oracle_vbox.asc
+  when: kah_env_use_virtualbox
+  tags:
+    - virtualbox
+
+- name: Install tailscale
+  become: true
+  ansible.builtin.dnf:
+    name: tailscale
+  when: kah_env_use_tailscale
+  tags:
+    - tailscale
+
+- name: Add VS Code repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+  tags:
+    - packages
+
+- name: Add VS Code repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: code
+    description: Visual Studio Code
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+    gpgcheck: true
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    file: vscode
+  tags:
+    - packages
+
+- name: Add gcloud repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    state: present
+  tags:
+    - packages
+
+- name: Add gcloud repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: google-cloud-cli
+    description: Google Cloud CLI
+    baseurl: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
+    gpgcheck: true
+    gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    file: google-cloud-sdk
+  tags:
+    - packages
+
+- name: Remove browser RPMs
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - firefox
+      - google-chrome-stable
+    state: absent
+
+- name: Install packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      # general tools
+      - cabextract
+      - coreos-installer
+      - dnf-automatic
+      - virt-manager
+      - wireguard-tools
+      - yubikey-manager
+      # general dev tools
+      - '@development-tools'
+      - google-cloud-cli
+      - ninja-build
+      - vym
+      - wl-clipboard
+      # container tools
+      - buildah
+      - podman
+      - podman-compose
+      - skopeo
+      # dotnet tools
+      - lutris
+      # linuxbrew deps
+      - procps-ng
+    state: present
+  tags:
+    - packages
