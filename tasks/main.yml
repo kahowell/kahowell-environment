@@ -167,5 +167,6 @@
   with_items:
     - mitmproxy
     - openhands-ai
+    - quarto-cli
   tags:
     - python
