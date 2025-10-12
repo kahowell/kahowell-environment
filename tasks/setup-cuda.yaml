@@ -1,0 +1,78 @@
+- name: Add NVIDIA repo
+  become: true
+  ansible.builtin.get_url:
+    url: "https://developer.download.nvidia.com/compute/cuda/repos/fedora{{ ansible_distribution_version }}/x86_64/cuda-fedora{{ ansible_distribution_version }}.repo"
+    dest: /etc/yum.repos.d/cuda.repo
+    mode: '0644'
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Add NVIDIA repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: "{{ lookup('ansible.builtin.file', '/etc/yum.repos.d/cuda.repo' ) | regex_search('gpgkey=([^\\s]+)', '\\1') | last }}"
+    state: present
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Install NVIDIA cuda packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - cuda-toolkit-13-0
+      - nvidia-open
+    state: present
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Add NVIDIA CTK repo
+  become: true
+  ansible.builtin.get_url:
+    url: https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+    dest: /etc/yum.repos.d/nvidia-container-toolkit.repo
+    mode: '0644'
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Add NVIDIA CTK repo key
+  become: true
+  ansible.builtin.rpm_key:
+    key: "{{ lookup('ansible.builtin.file', '/etc/yum.repos.d/nvidia-container-toolkit.repo' ) | regex_search('gpgkey=([^\\s]+)', '\\1') | last }}"
+    state: present
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Install NVIDIA CTK packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - nvidia-container-toolkit
+    state: present
+  when: kah_env_use_cuda
+  tags:
+    - cuda
+
+- name: Generate CDI specification file
+  become: true
+  ansible.builtin.command: nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+  args:
+    creates: /etc/cdi/nvidia.yaml
+  when: kah_env_use_cuda
+  ignore_errors: true
+  tags:
+    - cuda
+
+- name: Allow rootless containers to use cuda
+  become: true
+  ansible.posix.seboolean:
+    name: container_use_devices
+    state: true
+    persistent: true
+  when: kah_env_use_cuda
+  tags:
+    - cuda
