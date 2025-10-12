@@ -44,6 +44,7 @@
       - innoextract
       - pandoc
       - syncthing
+      - wakeonlan
       # general dev tools
       - atuin
       - bash-preexec
