@@ -35,7 +35,7 @@
       # general tools
       - android-platform-tools
       - claude-code
-    path: "{{ ansible_env.HOMEBREW_PREFIX }}/bin"
+    path: "{{ ansible_env['HOMEBREW_PREFIX'] }}/bin"
   tags:
     - brew
 
