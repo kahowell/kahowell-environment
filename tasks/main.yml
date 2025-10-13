@@ -4,17 +4,19 @@
 
 - name: Install homebrew
   ansible.builtin.include_tasks: "install-brew.yaml"
-  when: ansible_pkg_mgr=="dnf"  # assumed to be ublue-based otherwise
+  when: ansible_pkg_mgr=="dnf5"  # assumed to be ublue-based otherwise
 
 - name: Install RPMs
   ansible.builtin.include_tasks: "install-rpms.yaml"
-  when: ansible_pkg_mgr=="dnf"  # assumed to be ublue-based otherwise
+  when: ansible_pkg_mgr=="dnf5"  # assumed to be ublue-based otherwise
 
 - name: Setup CUDA
   ansible.builtin.include_tasks: "setup-cuda.yaml"
-  when: (ansible_pkg_mgr=="dnf" and kah_env_use_cuda)
+  when: (ansible_pkg_mgr=="dnf5" and kah_env_use_cuda)
 
 - name: Setup homebrew taps
+  become: "{{ ansible_pkg_mgr=='dnf5' }}"
+  become_user: "{{ 'linuxbrew' if ansible_pkg_mgr=='dnf5' else '' }}"
   community.general.homebrew_tap:
     name:
       - aquasecurity/trivy
@@ -26,15 +28,20 @@
     - brew
 
 - name: Install homebrew casks
+  become: "{{ ansible_pkg_mgr=='dnf5' }}"
+  become_user: "{{ 'linuxbrew' if ansible_pkg_mgr=='dnf5' else '' }}"
   community.general.homebrew_cask:
     name:
       # general tools
       - android-platform-tools
       - claude-code
+    path: "{{ ansible_env.HOMEBREW_PREFIX }}/bin"
   tags:
     - brew
 
 - name: Install homebrew packages
+  become: "{{ ansible_pkg_mgr=='dnf5' }}"
+  become_user: "{{ 'linuxbrew' if ansible_pkg_mgr=='dnf5' else '' }}"
   community.general.homebrew:
     name:
       # general tools
