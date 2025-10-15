@@ -45,6 +45,7 @@
   community.general.homebrew:
     name:
       # general tools
+      - bw
       - fd
       - fzf
       - git-delta
