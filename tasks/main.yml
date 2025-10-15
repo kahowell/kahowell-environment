@@ -45,7 +45,7 @@
   community.general.homebrew:
     name:
       # general tools
-      - bw
+      - bitwarden-cli
       - fd
       - fzf
       - git-delta
