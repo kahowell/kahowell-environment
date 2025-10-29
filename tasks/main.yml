@@ -64,6 +64,7 @@
       - gh
       - gitleaks
       - grpcurl
+      - grpcui
       - httpie
       - markdownlint-cli2
       - mermaid-cli
