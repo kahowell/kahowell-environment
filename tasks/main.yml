@@ -93,6 +93,7 @@
       - ripgrep
       - task
       - tig
+      - zsh
       # python tools
       - black
       - poetry
