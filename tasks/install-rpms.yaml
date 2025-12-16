@@ -89,6 +89,7 @@
       - yubikey-manager
       # general dev tools
       - '@development-tools'
+      - distrobox
       - google-cloud-cli
       - ninja-build
       - vym
