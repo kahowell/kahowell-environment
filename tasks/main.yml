@@ -165,6 +165,7 @@
       - org.gnome.meld
       - org.inkscape.Inkscape
       - org.kde.okteta
+      - org.mozilla.Thunderbird
       - org.mozilla.firefox
       - org.raspberrypi.rpi-imager
       - org.videolan.VLC
